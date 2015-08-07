@@ -1,0 +1,11 @@
+<h1>{{ bed }}</h1>                                                  
+                                                                                       
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}           
+    
+<ul>
+    <li>{{ bed.width_in }}</li>
+</ul>
+
+{% for bed_record in bed.bedrecord_set.all %}                                            
+    <p> crop: {{ bed_record }} sown: {{ bed_record.nursery_record }}</p>    
+{% endfor %}                                                                           

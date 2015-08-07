@@ -196,7 +196,9 @@ ROOT_URLCONF = "%s.urls" % PROJECT_APP
 # or "C:/www/django/templates".
 # Always use forward slashes, even on Windows.
 # Don't forget to use absolute paths, not relative paths.
-TEMPLATE_DIRS = (os.path.join(PROJECT_ROOT, "templates"),)
+TEMPLATE_DIRS = (
+    os.path.join(PROJECT_ROOT, "templates"),
+)
 
 
 ################
@@ -223,6 +225,8 @@ INSTALLED_APPS = (
     "mezzanine.twitter",
     # "mezzanine.accounts",
     # "mezzanine.mobile",
+    "polls",
+    "grow_records",
 )
 
 # List of processors used by RequestContext to populate the context.

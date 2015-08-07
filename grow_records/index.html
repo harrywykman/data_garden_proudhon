@@ -1,0 +1,10 @@
+{% f bed_list %}
+    <ul>
+    {% for bed in bed_list %}
+        <li><a href="/beds/{{bed.id }}/">{{ bed.name }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No beds.</p>
+{% endif %}
+

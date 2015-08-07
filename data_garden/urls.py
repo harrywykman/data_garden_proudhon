@@ -74,6 +74,8 @@ urlpatterns += patterns('',
     # ``mezzanine.urls``, go right ahead and take the parts you want
     # from it, and use them directly below instead of using
     # ``mezzanine.urls``.
+    url(r'^grow_records/', include('grow_records.urls', namespace="grow_records")),
+    url(r'^polls/', include('polls.urls', namespace="polls")),
     ("^", include("mezzanine.urls")),
 
     # MOUNTING MEZZANINE UNDER A PREFIX
