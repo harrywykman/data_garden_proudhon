@@ -1,0 +1,23 @@
+<h1>Crop Name: {{ crop }}</h1>                                                  
+                                                                                       
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}           
+
+<h2>CropDetails</h2>
+
+<ul>
+    <li>botanical name: {{ crop.genus }} {{ crop.species }}</li>
+</ul>
+
+<h2>Varieties</h2>
+
+<ul>
+    {% for variety in crop.varieties %}
+        <li> {{ variety }} </li>
+    {% endfor %}
+</ul>
+
+    
+<h2>Crop History</h2>
+
+<ul>                                                                                                                  
+</ul> 

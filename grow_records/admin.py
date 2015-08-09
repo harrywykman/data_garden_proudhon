@@ -2,7 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 
-from .models import (Crop, Variety, CropRecord, Genus, Species, 
+from .models import (Crop, Variety, Genus, Species, 
                         CommonName, Bed, Block, Site, SoilMediumBatch, 
                         PotOnRecord, NurseryRecord, BedRecord, SeederRecord
                     )
@@ -43,7 +43,6 @@ admin.site.register(Variety)
 admin.site.register(Genus)
 admin.site.register(Species)
 admin.site.register(CommonName)
-admin.site.register(CropRecord)
 admin.site.register(Bed, BedAdmin)
 admin.site.register(Block)
 admin.site.register(Site)

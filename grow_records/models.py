@@ -25,6 +25,9 @@ class Bed(models.Model):
     width_in = models.IntegerField(default=30)
     length_ft = models.IntegerField()
 
+    def bed_crop_history(self):
+        return self.bedrecord_set.all().order_by('-in_bed_date')
+
     def __unicode__(self):                                                                             
         if self.block:
             name = "%s %s" % (self.block.name, self.name)
@@ -62,6 +65,28 @@ class Crop(models.Model):
             name = "%s %s" % (self.genus.name, self.species.name)
         return name
 
+    def in_ground(self):
+        """
+        Returns True is crop is currently in a bed.
+        """
+        brs = self.objects.bedrecord_set.all().order_by('in_bed_date')
+        print brs[0]
+        if brs[0].out_bed_date:
+            return False
+        return True
+
+    def in_nursery(self):                                                                           
+        """                                                                                        
+        Returns True is crop is currently in nursery.                                                
+        """                                                                                        
+        pass
+
+    def varieties(self):
+        """
+        Returns a list of varieties.
+        """
+        return self.variety_set.all()
+
 class Variety(models.Model):
     crop = models.ForeignKey(Crop, null=True)
     name = models.CharField(max_length=100)
@@ -85,7 +110,7 @@ class PotOnRecord(models.Model):
 
 class NurseryRecord(models.Model):
     variety = models.ForeignKey(Variety, null=True)
-    start_date = models.DateTimeField('date of propagation', null=True)
+    in_nursery_date = models.DateTimeField('date of propagation', null=True)
     germ_date = models.DateTimeField('date of germination', null=True, blank=True)
     tray_size_cell = models.IntegerField('tray size \(number cells\)', \
                                         null=True)
@@ -93,7 +118,7 @@ class NurseryRecord(models.Model):
     medium = models.ForeignKey(SoilMediumBatch, null=True)
 
     def __unicode__(self):
-        name = self.start_date.strftime('%Y-%m-%d %H:%M') 
+        name = self.in_nursery_date.strftime('%Y-%m-%d %H:%M') 
         if self.variety:
             name = "%s %s" % (self.variety, name)
         return name
@@ -105,20 +130,22 @@ class PotOnRecord(models.Model):
     medium = models.ForeignKey(SoilMediumBatch, null=True)
     nursery_record = models.ForeignKey(NurseryRecord, null=True)
 
-# PROBABLY UNNECESSARY
+"""
+
 class CropRecord(models.Model):
     variety = models.ForeignKey(Variety, null=True)
-    record_date = models.DateTimeField('date record created')
     bed = models.ForeignKey(Bed, null=True)
     rows = models.IntegerField(null=True)
     spacing_in = models.IntegerField('spacing \(inches\)', null=True)
     nursery_record = models.ForeignKey(NurseryRecord, null=True)
 
     def __unicode__(self):
-        name = self.record_date.strftime('%Y-%m-%d %H:%M')
+        name = self.in_bed_date.strftime('%Y-%m-%d %H:%M')
         if self.variety:
             name = "%s %s" % (self.variety, name)
         return name
+
+"""
 
 class SeederRecord (models.Model):
     EARTHWAY = 'EW'
@@ -132,20 +159,14 @@ class SeederRecord (models.Model):
 
 
 class BedRecord(models.Model):
-    record_date = models.DateTimeField('transplant or seeding date', null=True)
+    in_bed_date = models.DateTimeField('transplant or seeding date', null=True)
+    out_bed_date = models.DateTimeField('date crop removed', null=True)
     bed = models.ForeignKey(Bed, null=True) 
     variety = models.ForeignKey(Variety, null=True)
     nursery_record = models.ForeignKey(NurseryRecord, null=True, blank=True)
     rows = models.IntegerField(null=True)
     spacing_in = models.IntegerField('spacing \(inches\)', null=True)
     seeder = models.ForeignKey(SeederRecord, null=True, blank=True)
-
-    def propagation_date():
-        if nursery_record:
-            date = nursery_record.start_date
-        else:
-            date = record_date
-        return date
 
     def __unicode__(self):
         if self.variety and self.bed:

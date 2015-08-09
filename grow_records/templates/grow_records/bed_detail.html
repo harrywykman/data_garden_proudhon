@@ -1,0 +1,23 @@
+<h1>Bed Name: {{ bed }}</h1>                                                  
+                                                                                       
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}           
+
+<h2>Bed Details</h2>
+    
+<ul>
+    <li>bed location</li>
+        <ul>
+            <li>site: {{ bed.site }}</li>
+            <li>block: {{ bed.block }}</li>
+        </ul>
+    <li>bed width (in): {{ bed.width_in }}</li>
+    <li>bed length (ft): {{ bed.length_ft }}</li> 
+</ul>
+
+<h2>Bed Crop History</h2>
+
+<ol>
+    {% for record in bed.bed_crop_history %}
+        <li> {{ record }} </li>
+    {% endfor %}
+</ol>

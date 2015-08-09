@@ -1,0 +1,10 @@
+                                                                                                                           
+{% if bed_list %}                                                                                              
+    <ul>                                                                                                                   
+    {% for bed in bed_list %}                                                                             
+        <li><a href="{% url 'grow_records:bed_detail' bed.id %}">{{ bed }}</a></li>                           
+    {% endfor %}                                                                                                           
+    </ul>                                                                                                                  
+{% else %}                                                                                                                 
+    <p>No beds are available.</p>                                                                                         
+{% endif %}          

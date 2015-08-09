@@ -1,10 +1,6 @@
                                                                                                                            
-{% if bed_list %}                                                                                              
     <ul>                                                                                                                   
-    {% for bed in bed_list %}                                                                             
-        <li><a href="{% url 'grow_records:detail' bed.id %}">{{ bed }}</a></li>                           
-    {% endfor %}                                                                                                           
+        <li><a href="{% url 'grow_records:bed_index' %}">Beds</a></li>
+        <li><a href="{% url 'grow_records:crop_index' %}">Crops</a></li>
+        <li><a href="{% url 'grow_records:current_crops_index' %}">Current Crops</a></li>
     </ul>                                                                                                                  
-{% else %}                                                                                                                 
-    <p>No beds are available.</p>                                                                                         
-{% endif %}          

@@ -1,0 +1,10 @@
+                                                                                                                           
+{% if crop_list %}                                                                                              
+    <ul>                                                                                                                   
+    {% for crop in crop_list %}                                                                             
+        <li><a href="{% url 'grow_records:crop_detail' crop.id %}">{{ crop }}</a></li>                           
+    {% endfor %}                                                                                                           
+    </ul>                                                                                                                  
+{% else %}                                                                                                                 
+    <p>No crops are available.</p>                                                                                         
+{% endif %}          
