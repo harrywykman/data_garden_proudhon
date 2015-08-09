@@ -1,0 +1,11 @@
+<h1>Crop: {{ bed_record.variety }}</h1>                                                  
+                                                                                       
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}           
+
+<h2>Bed Crop History</h2>
+
+<ol>
+    {% for variety in bedrecord.varieties %}
+        <li> {{ variety }} </li>
+    {% endfor %}
+</ol>

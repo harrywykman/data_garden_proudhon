@@ -65,6 +65,13 @@ class Crop(models.Model):
             name = "%s %s" % (self.genus.name, self.species.name)
         return name
 
+    def crop_history(self):                                                                    
+        varieties = self.variety_set.all()
+        bed_records = []
+        for variety in varieties:
+            bed_records.append(variety.bedrecord_set.all().order_by('-in_bed_date'))
+        return bed_records
+
     def in_ground(self):
         """
         Returns True is crop is currently in a bed.
@@ -167,10 +174,23 @@ class BedRecord(models.Model):
     rows = models.IntegerField(null=True)
     spacing_in = models.IntegerField('spacing \(inches\)', null=True)
     seeder = models.ForeignKey(SeederRecord, null=True, blank=True)
+    bed_percent = models.IntegerField(100, null=True)
+
+    def in_ground(self):
+        now = timezone.now()
+        if self.in_bed_date < now and not self.out_bed_date:
+            return True
+        else:
+            return False
 
     def __unicode__(self):
         if self.variety and self.bed:
             name = "%s - %s" % (self.bed, self.variety) 
         return name 
 
-    
+class HarvestRecord(models.Model):
+    bed_record = models.ForeignKey(BedRecord, null=True)
+    weight_kg = models.FloatField('weight (kg)', default=0)
+    harvest_date = models.DateTimeField('harvest date', null=True)
+
+

@@ -16,8 +16,10 @@
     {% endfor %}
 </ul>
 
-    
-<h2>Crop History</h2>
-
-<ul>                                                                                                                  
-</ul> 
+<h2>Crop History</h2>                                                                                                                                          
+                                                                                                                                                                   
+<ol>                                                                                                                                                               
+    {% for record in crop.crop_history %}                                                                                                                       
+        <li> {{ record }} </li>                                                                                                                                    
+    {% endfor %}                                                                                                                                                   
+</ol> 

@@ -1,11 +1,10 @@
                                                                                                                            
-{% if record_list %}                                                                                              
+{% if bed_record_list %}                                                                                              
     <ul>                                                                                                                   
-    {% for record in record_list %}                                                                             
-        <li><a href="{% url 'grow_records:crop_detail' record.variety.crop.id %}">{{ record.variety }}</a> 
-            is in <a href="{% url 'grow_records:bed_detail' record.bed.id %}"> {{ record.bed }}</a></li>                           
+    {% for bed_record in bed_record_list %}                                                                             
+        <li><a href="">{{ bed_record }}</a></li>                           
     {% endfor %}                                                                                                           
     </ul>                                                                                                                  
 {% else %}                                                                                                                 
-    <p>No crops are available.</p>                                                                                         
+    <p>No bed records are available.</p>                                                                                         
 {% endif %}          

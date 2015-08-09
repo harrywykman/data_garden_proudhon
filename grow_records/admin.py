@@ -4,7 +4,8 @@ from django.contrib import admin
 
 from .models import (Crop, Variety, Genus, Species, 
                         CommonName, Bed, Block, Site, SoilMediumBatch, 
-                        PotOnRecord, NurseryRecord, BedRecord, SeederRecord
+                        PotOnRecord, NurseryRecord, BedRecord, SeederRecord,
+                        HarvestRecord
                     )
 
 class PotOnRecordInline(admin.TabularInline):
@@ -49,5 +50,6 @@ admin.site.register(Site)
 admin.site.register(SoilMediumBatch)
 admin.site.register(PotOnRecord)
 admin.site.register(NurseryRecord, NurseryRecordAdmin)
-admin.site.register(BedRecord)
 admin.site.register(SeederRecord)
+admin.site.register(HarvestRecord)
+admin.site.register(BedRecord)

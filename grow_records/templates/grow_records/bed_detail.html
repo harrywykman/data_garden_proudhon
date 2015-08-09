@@ -18,6 +18,12 @@
 
 <ol>
     {% for record in bed.bed_crop_history %}
-        <li> {{ record }} </li>
+        <li> 
+            {% if record.in_ground %}
+                <strong>{{ record }} --- current crop</strong> 
+            {% else %} 
+                {{ record }}
+            {% endif %} 
+        </li>
     {% endfor %}
 </ol>

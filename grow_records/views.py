@@ -48,6 +48,16 @@ class BedDetailView(generic.DetailView):
         """                                                                     
         return Bed.objects.all()
 
+class BedRecordIndexView(generic.ListView):                                                                                                               
+    template_name = 'grow_records/bed_record_index.html'                                                                                                   
+    context_object_name = 'bed_record_list'                                                                                                                
+                                                                                                                                                    
+    def get_queryset(self):                                                                                                                         
+        """                                                                                                                                         
+        Return all beds.                                                                                                                            
+        """                                                                                                                                         
+        return BedRecord.objects.all()
+
 
 class CropIndexView(generic.ListView):
     template_name = 'grow_records/crop_index.html'
@@ -69,9 +79,20 @@ class CurrentCropsIndexView(generic.ListView):
         Return list of current crops.                                                       
         """
         return BedRecord.objects.filter(out_bed_date__isnull=True).order_by('variety__crop__common_name__name')
+        #return BedRecord.objects.filter(out_bed_date__isnull=True).distinct('variety__crop__common_name__name', 'variety').order_by('variety__crop__common_name__name')
             
 
+#class CropHistoryView(generic.DetailView):
+#    models = BedRecord
+#    template_name = 'grow_records/crop_history.html'
+#
+#    def get_queryset(self):                                                                                                                         
+#        """                                                                                                                                         
+#        Excludes any questions that aren't published yet.                                                                                           
+#        """                                                                                                                                         
+#        return BedRecord.objects.all()
 
+    
 class CropDetailView(generic.DetailView):                                        
     model = Crop                                                                 
     template_name = 'grow_records/crop_detail.html'                              
