@@ -1,0 +1,140 @@
+[72.14.178.8] Executing task 'deploy'
+
+[1;32m------
+deploy
+------[0m
+
+
+[1;34m$ [0m[1;33mpg_dump -Fc data_garden > /tmp/last.db[0m[1;31m ->[0m
+
+[72.14.178.8] out: sudo password:
+[72.14.178.8] out: 
+
+[1;34m$ [0m[1;33mcp /tmp/last.db .[0m[1;31m ->[0m
+
+
+[1;34m$ [0m[1;33mrm -f /tmp/last.db[0m[1;31m ->[0m
+
+[72.14.178.8] out: sudo password:
+[72.14.178.8] out: 
+
+[1;34m$ [0m[1;33mgit rev-parse HEAD > /home/gerrard/mezzanine/data_garden/last.commit[0m[1;31m ->[0m
+
+[72.14.178.8] out: /home/gerrard/mezzanine/data_garden/static
+[72.14.178.8] out: 
+
+[1;34m$ [0m[1;33mtar -cf static.tar --exclude='*.thumbnails' /home/gerrard/mezzanine/data_garden/static[0m[1;31m ->[0m
+
+[72.14.178.8] out: tar: Removing leading `/' from member names
+[72.14.178.8] out: 
+[72.14.178.8] out: beautifulsoup4==4.4.0
+[72.14.178.8] out: bleach==1.4.1
+[72.14.178.8] out: chardet==2.3.0
+[72.14.178.8] out: Django==1.8.3
+[72.14.178.8] out: django-appconf==1.0.1
+[72.14.178.8] out: django-compressor==1.5
+[72.14.178.8] out: django-contrib-comments==1.6.1
+[72.14.178.8] out: ecdsa==0.13
+[72.14.178.8] out: Fabric==1.10.2
+[72.14.178.8] out: filebrowser-safe==0.4.0
+[72.14.178.8] out: future==0.15.0
+[72.14.178.8] out: grappelli-safe==0.4.0
+[72.14.178.8] out: html5lib==0.999999
+[72.14.178.8] out: Mezzanine==4.0.1
+[72.14.178.8] out: oauthlib==1.0.1
+[72.14.178.8] out: paramiko==1.15.2
+[72.14.178.8] out: Pillow==2.9.0
+[72.14.178.8] out: psycopg2==2.6.1
+[72.14.178.8] out: pycrypto==2.6.1
+[72.14.178.8] out: pytz==2015.4
+[72.14.178.8] out: requests==2.7.0
+[72.14.178.8] out: requests-oauthlib==0.5.0
+[72.14.178.8] out: six==1.9.0
+[72.14.178.8] out: South==1.0.2
+[72.14.178.8] out: tzlocal==1.2
+[72.14.178.8] out: wheel==0.24.0
+[72.14.178.8] out: yolk==0.4.3
+[72.14.178.8] out: 
+[localhost] local: git push -f ssh://gerrard@72.14.178.8/home/gerrard/git/data_garden.git master
+
+[1;34m$ [0m[1;33mGIT_WORK_TREE=/home/gerrard/mezzanine/data_garden git checkout -f master[0m[1;31m ->[0m
+
+[72.14.178.8] out: Already on 'master'
+[72.14.178.8] out: 
+
+[1;34m$ [0m[1;33mGIT_WORK_TREE=/home/gerrard/mezzanine/data_garden git reset --hard[0m[1;31m ->[0m
+
+[72.14.178.8] out: HEAD is now at 8e6d688 commit to test content deployment
+[72.14.178.8] out: 
+[72.14.178.8] out: beautifulsoup4==4.4.0
+[72.14.178.8] out: bleach==1.4.1
+[72.14.178.8] out: chardet==2.3.0
+[72.14.178.8] out: Django==1.8.3
+[72.14.178.8] out: django-appconf==1.0.1
+[72.14.178.8] out: django-compressor==1.5
+[72.14.178.8] out: django-contrib-comments==1.6.1
+[72.14.178.8] out: ecdsa==0.13
+[72.14.178.8] out: Fabric==1.10.2
+[72.14.178.8] out: filebrowser-safe==0.4.0
+[72.14.178.8] out: future==0.15.0
+[72.14.178.8] out: grappelli-safe==0.4.0
+[72.14.178.8] out: html5lib==0.999999
+[72.14.178.8] out: Mezzanine==4.0.1
+[72.14.178.8] out: oauthlib==1.0.1
+[72.14.178.8] out: paramiko==1.15.2
+[72.14.178.8] out: Pillow==2.9.0
+[72.14.178.8] out: psycopg2==2.6.1
+[72.14.178.8] out: pycrypto==2.6.1
+[72.14.178.8] out: pytz==2015.4
+[72.14.178.8] out: requests==2.7.0
+[72.14.178.8] out: requests-oauthlib==0.5.0
+[72.14.178.8] out: six==1.9.0
+[72.14.178.8] out: South==1.0.2
+[72.14.178.8] out: tzlocal==1.2
+[72.14.178.8] out: wheel==0.24.0
+[72.14.178.8] out: yolk==0.4.3
+[72.14.178.8] out: 
+
+[1;34m$ [0m[1;33m/home/gerrard/.virtualenvs/data_garden/bin/python /home/gerrard/mezzanine/data_garden/manage.py collectstatic -v 0 --noinput[0m[1;31m ->[0m
+
+
+[1;34m$ [0m[1;33m/home/gerrard/.virtualenvs/data_garden/bin/python /home/gerrard/mezzanine/data_garden/manage.py syncdb --noinput[0m[1;31m ->[0m
+
+[72.14.178.8] out: [36;1mOperations to perform:[0m
+[72.14.178.8] out: [1m  Synchronize unmigrated apps: [0mstaticfiles, boot, filebrowser_safe, sitemaps, compressor, grappelli_safe
+[72.14.178.8] out: [1m  Apply all migrations: [0mcore, redirects, polls, django_comments, grow_records, sessions, admin, twitter, galleries, sites, auth, blog, generic, contenttypes, conf, forms, pages
+[72.14.178.8] out: [36;1mSynchronizing apps without migrations:[0m
+[72.14.178.8] out:   Creating tables...
+[72.14.178.8] out:     Running deferred SQL...
+[72.14.178.8] out:   Installing custom SQL...
+[72.14.178.8] out: [36;1mRunning migrations:[0m
+[72.14.178.8] out:   No migrations to apply.
+[72.14.178.8] out: [31m  Your models have changes that are not yet reflected in a migration, and so won't be applied.[0m
+[72.14.178.8] out: [31m  Run 'manage.py makemigrations' to make new migrations, and then re-run 'manage.py migrate' to apply them.[0m
+[72.14.178.8] out: 
+
+[1;34m$ [0m[1;33m/home/gerrard/.virtualenvs/data_garden/bin/python /home/gerrard/mezzanine/data_garden/manage.py migrate --noinput[0m[1;31m ->[0m
+
+[72.14.178.8] out: [36;1mOperations to perform:[0m
+[72.14.178.8] out: [1m  Synchronize unmigrated apps: [0mstaticfiles, boot, filebrowser_safe, sitemaps, compressor, grappelli_safe
+[72.14.178.8] out: [1m  Apply all migrations: [0mcore, redirects, polls, django_comments, grow_records, sessions, admin, twitter, galleries, sites, auth, blog, generic, contenttypes, conf, forms, pages
+[72.14.178.8] out: [36;1mSynchronizing apps without migrations:[0m
+[72.14.178.8] out:   Creating tables...
+[72.14.178.8] out:     Running deferred SQL...
+[72.14.178.8] out:   Installing custom SQL...
+[72.14.178.8] out: [36;1mRunning migrations:[0m
+[72.14.178.8] out:   No migrations to apply.
+[72.14.178.8] out: [31m  Your models have changes that are not yet reflected in a migration, and so won't be applied.[0m
+[72.14.178.8] out: [31m  Run 'manage.py makemigrations' to make new migrations, and then re-run 'manage.py migrate' to apply them.[0m
+[72.14.178.8] out: 
+
+[1;32m-------
+restart
+-------[0m
+
+
+[1;34m$ [0m[1;33mkill -HUP `cat /home/gerrard/mezzanine/data_garden/gunicorn.pid`[0m[1;31m ->[0m
+
+
+Done.
+Disconnecting from 72.14.178.8... done.

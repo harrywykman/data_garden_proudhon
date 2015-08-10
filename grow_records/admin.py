@@ -5,7 +5,8 @@ from django.contrib import admin
 from .models import (Crop, Variety, Genus, Species, 
                         CommonName, Bed, Block, Site, SoilMediumBatch, 
                         PotOnRecord, NurseryRecord, BedRecord, SeederRecord,
-                        HarvestRecord
+                        HarvestRecord, Buyer, DeliveryRecord, DeliveryItem, 
+                        Price
                     )
 
 class PotOnRecordInline(admin.TabularInline):
@@ -39,6 +40,18 @@ class BedAdmin(admin.ModelAdmin):
     ]
     inlines = [BedRecordInline]
 
+
+class DeliveryItemInline(admin.TabularInline):
+    model = DeliveryItem
+    extra = 5
+
+class DeliveryRecordAdmin(admin.ModelAdmin):
+    fieldsets = [                                                                                           
+        ('date',            {'fields': ['date']}),                                                          
+        ('buyer',           {'fields': ['buyer']}),                                                         
+    ]
+    inlines = [DeliveryItemInline]
+
 admin.site.register(Crop)
 admin.site.register(Variety)
 admin.site.register(Genus)
@@ -53,3 +66,7 @@ admin.site.register(NurseryRecord, NurseryRecordAdmin)
 admin.site.register(SeederRecord)
 admin.site.register(HarvestRecord)
 admin.site.register(BedRecord)
+admin.site.register(Buyer)
+admin.site.register(DeliveryRecord, DeliveryRecordAdmin)
+admin.site.register(DeliveryItem)
+admin.site.register(Price)

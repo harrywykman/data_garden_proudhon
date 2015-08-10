@@ -1,3 +1,11 @@
+{% extends "base.html" %}                                                                            
+{% load i18n %}                                                                                      
+                                                                                                     
+{% block meta_title %}{% trans "Grow Records" %}{% endblock %}                                       
+{% block title %}{% trans "Grow Records" %}{% endblock %}                                            
+                                                                                                     
+{% block main %}
+
 <h1>Crop: {{ bed_record.variety }}</h1>                                                  
                                                                                        
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}           
@@ -9,3 +17,5 @@
         <li> {{ variety }} </li>
     {% endfor %}
 </ol>
+
+{% endblock %}

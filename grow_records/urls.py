@@ -3,8 +3,8 @@ from . import views
 
 urlpatterns = [
     url(r'^$', views.IndexView.as_view(), name='index'),
-    url(r'^(?P<pk>[0-9]+)/$', views.DetailView.as_view(), name='detail'),
-    url(r'^(?P<pk>[0-9]+)/results/$', views.ResultsView.as_view(), name='results'),
+    #url(r'^(?P<pk>[0-9]+)/$', views.DetailView.as_view(), name='detail'),
+    #url(r'^(?P<pk>[0-9]+)/results/$', views.ResultsView.as_view(), name='results'),
     url(r'^beds/$', views.BedIndexView.as_view(), name='bed_index'),
     url(r'^beds/(?P<pk>[0-9]+)/$', views.BedDetailView.as_view(), name='bed_detail'),
     url(r'^crops/$', views.CropIndexView.as_view(), name='crop_index'),

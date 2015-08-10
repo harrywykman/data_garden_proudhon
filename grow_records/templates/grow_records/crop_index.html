@@ -1,4 +1,10 @@
-                                                                                                                           
+{% extends "base.html" %}                                                                            
+{% load i18n %}                                                                                      
+                                                                                                     
+{% block meta_title %}{% trans "Grow Records" %}{% endblock %}                                       
+{% block title %}{% trans "Grow Records" %}{% endblock %}                                            
+                                                                                                     
+{% block main %}                                                                                                                           
 {% if crop_list %}                                                                                              
     <ul>                                                                                                                   
     {% for crop in crop_list %}                                                                             
@@ -8,3 +14,5 @@
 {% else %}                                                                                                                 
     <p>No crops are available.</p>                                                                                         
 {% endif %}          
+
+{% endblock %}

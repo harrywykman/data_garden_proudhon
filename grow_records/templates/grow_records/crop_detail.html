@@ -1,3 +1,11 @@
+{% extends "base.html" %}                                                                            
+{% load i18n %}                                                                                      
+                                                                                                     
+{% block meta_title %}{% trans "Grow Records" %}{% endblock %}                                       
+{% block title %}{% trans "Grow Records" %}{% endblock %}                                            
+                                                                                                     
+{% block main %}
+
 <h1>Crop Name: {{ crop }}</h1>                                                  
                                                                                        
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}           
@@ -12,7 +20,7 @@
 
 <ul>
     {% for variety in crop.varieties %}
-        <li> {{ variety }} </li>
+        <li> {{ variety }} --- current price: {{ variety.current_price }}</li>
     {% endfor %}
 </ul>
 
@@ -23,3 +31,5 @@
         <li> {{ record }} </li>                                                                                                                                    
     {% endfor %}                                                                                                                                                   
 </ol> 
+
+{% endblock %}

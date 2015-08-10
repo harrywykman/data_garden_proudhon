@@ -5,6 +5,13 @@ from django.utils import timezone
 
 # Create your models here.
 
+KILOGRAM = 'kg'                                                                                                                                 
+POUND = 'lb'                                                                                                                                    
+UNIT_CHOICES = (                                                                                                                                
+    (KILOGRAM, 'kilogram'),                                                                                                                     
+    (POUND, 'pound'),                                                                                                                           
+) 
+
 class Site(models.Model):
     name = models.CharField(max_length=200)
     
@@ -104,6 +111,12 @@ class Variety(models.Model):
             return name
         return self.name 
 
+    def current_price(self):                                                                                                                        
+        price = self.price_set.all().order_by('date')
+        if price:
+            return "%s / %s" % (price[0].price, price[0].unit)
+        else:
+            return "No price set for this variety"
 
 class SoilMediumBatch(models.Model):
     created = models.DateTimeField('date medium created') 
@@ -162,7 +175,7 @@ class SeederRecord (models.Model):
         (GLASSER, 'Glasser'),
     )
     name = models.CharField(max_length=2, choices=SEEDER_CHOICES)
-    seeder_settings = models.CharField(max_length=2, null=True)
+    seeder_settings = models.CharField(max_length=100, null=True)
 
 
 class BedRecord(models.Model):
@@ -174,7 +187,7 @@ class BedRecord(models.Model):
     rows = models.IntegerField(null=True)
     spacing_in = models.IntegerField('spacing \(inches\)', null=True)
     seeder = models.ForeignKey(SeederRecord, null=True, blank=True)
-    bed_percent = models.IntegerField(100, null=True)
+    bed_percent = models.IntegerField('percentage of bed for crop', default=100, null=True)
 
     def in_ground(self):
         now = timezone.now()
@@ -190,7 +203,44 @@ class BedRecord(models.Model):
 
 class HarvestRecord(models.Model):
     bed_record = models.ForeignKey(BedRecord, null=True)
-    weight_kg = models.FloatField('weight (kg)', default=0)
+    unit = models.CharField(max_length=2, null=True, choices=UNIT_CHOICES)
+    amount = models.FloatField('amount', default=0)
     harvest_date = models.DateTimeField('harvest date', null=True)
 
+    def __unicode__(self):                                                                                                                          
+        return "%s %s of %s from %s" % (self.amount, self.unit, 
+                                     self.bed_record.variety, 
+                                     self.bed_record.bed)
 
+class Buyer(models.Model):
+    name = models.CharField(max_length=100, null=True)
+    
+    def __unicode__(self):                                                                                                                          
+        return self.name
+
+    
+class DeliveryRecord(models.Model):
+    date = models.DateTimeField('delivery_date', null=True)    
+    buyer = models.ForeignKey(Buyer, null=True)
+
+    def __unicode__(self):                                                                                                                          
+        return "%s --- %s" % (self.buyer, self.date)
+
+class Price(models.Model):
+    variety = models.ForeignKey(Variety, null=True)
+    date = models.DateTimeField('date price set', null=True, default=timezone.now)
+    price = models.FloatField('price', default=0, null=True)
+    unit = models.CharField(max_length=2, null=True, choices=UNIT_CHOICES)
+
+    def __unicode__(self):                                                                                                                          
+        return "%s @ %s / %s" % (self.variety, self.price, self.unit)
+
+class DeliveryItem(models.Model):
+    delivery_record = models.ForeignKey(DeliveryRecord, null=True)
+    variety = models.ForeignKey(Variety, null=True)
+    unit = models.CharField(max_length=2, null=True, choices=UNIT_CHOICES)
+    amount = models.FloatField('amount)', default=0)
+    price = models.ForeignKey(Price, null=True)
+
+    def __unicode__(self):                                                                                                                                                                                                                                        
+        return "%s - %s %s @ %s" % (self.variety, self.amount, self.unit, self.price) 
