@@ -1187,6 +1187,39 @@ ALTER SEQUENCE grow_records_block_id_seq OWNED BY grow_records_block.id;
 
 
 --
+-- Name: grow_records_buyer; Type: TABLE; Schema: public; Owner: gerrard; Tablespace: 
+--
+
+CREATE TABLE grow_records_buyer (
+    id integer NOT NULL,
+    name character varying(100)
+);
+
+
+ALTER TABLE grow_records_buyer OWNER TO gerrard;
+
+--
+-- Name: grow_records_buyer_id_seq; Type: SEQUENCE; Schema: public; Owner: gerrard
+--
+
+CREATE SEQUENCE grow_records_buyer_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE grow_records_buyer_id_seq OWNER TO gerrard;
+
+--
+-- Name: grow_records_buyer_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: gerrard
+--
+
+ALTER SEQUENCE grow_records_buyer_id_seq OWNED BY grow_records_buyer.id;
+
+
+--
 -- Name: grow_records_commonname; Type: TABLE; Schema: public; Owner: gerrard; Tablespace: 
 --
 
@@ -1255,6 +1288,77 @@ ALTER SEQUENCE grow_records_crop_id_seq OWNED BY grow_records_crop.id;
 
 
 --
+-- Name: grow_records_deliveryitem; Type: TABLE; Schema: public; Owner: gerrard; Tablespace: 
+--
+
+CREATE TABLE grow_records_deliveryitem (
+    id integer NOT NULL,
+    amount double precision NOT NULL,
+    delivery_record_id integer,
+    variety_id integer,
+    unit character varying(2),
+    price_id integer
+);
+
+
+ALTER TABLE grow_records_deliveryitem OWNER TO gerrard;
+
+--
+-- Name: grow_records_deliveryitem_id_seq; Type: SEQUENCE; Schema: public; Owner: gerrard
+--
+
+CREATE SEQUENCE grow_records_deliveryitem_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE grow_records_deliveryitem_id_seq OWNER TO gerrard;
+
+--
+-- Name: grow_records_deliveryitem_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: gerrard
+--
+
+ALTER SEQUENCE grow_records_deliveryitem_id_seq OWNED BY grow_records_deliveryitem.id;
+
+
+--
+-- Name: grow_records_deliveryrecord; Type: TABLE; Schema: public; Owner: gerrard; Tablespace: 
+--
+
+CREATE TABLE grow_records_deliveryrecord (
+    id integer NOT NULL,
+    date timestamp with time zone,
+    buyer_id integer
+);
+
+
+ALTER TABLE grow_records_deliveryrecord OWNER TO gerrard;
+
+--
+-- Name: grow_records_deliveryrecord_id_seq; Type: SEQUENCE; Schema: public; Owner: gerrard
+--
+
+CREATE SEQUENCE grow_records_deliveryrecord_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE grow_records_deliveryrecord_id_seq OWNER TO gerrard;
+
+--
+-- Name: grow_records_deliveryrecord_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: gerrard
+--
+
+ALTER SEQUENCE grow_records_deliveryrecord_id_seq OWNED BY grow_records_deliveryrecord.id;
+
+
+--
 -- Name: grow_records_genus; Type: TABLE; Schema: public; Owner: gerrard; Tablespace: 
 --
 
@@ -1293,8 +1397,10 @@ ALTER SEQUENCE grow_records_genus_id_seq OWNED BY grow_records_genus.id;
 
 CREATE TABLE grow_records_harvestrecord (
     id integer NOT NULL,
-    weight_kg double precision NOT NULL,
-    bed_record_id integer
+    bed_record_id integer,
+    harvest_date timestamp with time zone,
+    amount double precision NOT NULL,
+    unit character varying(2)
 );
 
 
@@ -1396,13 +1502,49 @@ ALTER SEQUENCE grow_records_potonrecord_id_seq OWNED BY grow_records_potonrecord
 
 
 --
+-- Name: grow_records_price; Type: TABLE; Schema: public; Owner: gerrard; Tablespace: 
+--
+
+CREATE TABLE grow_records_price (
+    id integer NOT NULL,
+    date timestamp with time zone,
+    price double precision,
+    unit character varying(2),
+    variety_id integer
+);
+
+
+ALTER TABLE grow_records_price OWNER TO gerrard;
+
+--
+-- Name: grow_records_price_id_seq; Type: SEQUENCE; Schema: public; Owner: gerrard
+--
+
+CREATE SEQUENCE grow_records_price_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE grow_records_price_id_seq OWNER TO gerrard;
+
+--
+-- Name: grow_records_price_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: gerrard
+--
+
+ALTER SEQUENCE grow_records_price_id_seq OWNED BY grow_records_price.id;
+
+
+--
 -- Name: grow_records_seederrecord; Type: TABLE; Schema: public; Owner: gerrard; Tablespace: 
 --
 
 CREATE TABLE grow_records_seederrecord (
     id integer NOT NULL,
     name character varying(2) NOT NULL,
-    seeder_settings character varying(2)
+    seeder_settings character varying(100)
 );
 
 
@@ -1998,6 +2140,13 @@ ALTER TABLE ONLY grow_records_block ALTER COLUMN id SET DEFAULT nextval('grow_re
 -- Name: id; Type: DEFAULT; Schema: public; Owner: gerrard
 --
 
+ALTER TABLE ONLY grow_records_buyer ALTER COLUMN id SET DEFAULT nextval('grow_records_buyer_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: gerrard
+--
+
 ALTER TABLE ONLY grow_records_commonname ALTER COLUMN id SET DEFAULT nextval('grow_records_commonname_id_seq'::regclass);
 
 
@@ -2006,6 +2155,20 @@ ALTER TABLE ONLY grow_records_commonname ALTER COLUMN id SET DEFAULT nextval('gr
 --
 
 ALTER TABLE ONLY grow_records_crop ALTER COLUMN id SET DEFAULT nextval('grow_records_crop_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: gerrard
+--
+
+ALTER TABLE ONLY grow_records_deliveryitem ALTER COLUMN id SET DEFAULT nextval('grow_records_deliveryitem_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: gerrard
+--
+
+ALTER TABLE ONLY grow_records_deliveryrecord ALTER COLUMN id SET DEFAULT nextval('grow_records_deliveryrecord_id_seq'::regclass);
 
 
 --
@@ -2034,6 +2197,13 @@ ALTER TABLE ONLY grow_records_nurseryrecord ALTER COLUMN id SET DEFAULT nextval(
 --
 
 ALTER TABLE ONLY grow_records_potonrecord ALTER COLUMN id SET DEFAULT nextval('grow_records_potonrecord_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: gerrard
+--
+
+ALTER TABLE ONLY grow_records_price ALTER COLUMN id SET DEFAULT nextval('grow_records_price_id_seq'::regclass);
 
 
 --
@@ -2277,6 +2447,27 @@ COPY auth_permission (id, name, content_type_id, codename) FROM stdin;
 164	Can add harvest record	55	add_harvestrecord
 165	Can change harvest record	55	change_harvestrecord
 166	Can delete harvest record	55	delete_harvestrecord
+167	Can add buyer	56	add_buyer
+168	Can change buyer	56	change_buyer
+169	Can delete buyer	56	delete_buyer
+170	Can add delivery record	57	add_deliveryrecord
+171	Can change delivery record	57	change_deliveryrecord
+172	Can delete delivery record	57	delete_deliveryrecord
+173	Can add delivery item	58	add_deliveryitem
+174	Can change delivery item	58	change_deliveryitem
+175	Can delete delivery item	58	delete_deliveryitem
+179	Can add price	60	add_price
+180	Can change price	60	change_price
+181	Can delete price	60	delete_price
+182	Can add length uom	61	add_lengthuom
+183	Can change length uom	61	change_lengthuom
+184	Can delete length uom	61	delete_lengthuom
+185	Can add family	62	add_family
+186	Can change family	62	change_family
+187	Can delete family	62	delete_family
+188	Can add yield uom	63	add_yielduom
+189	Can change yield uom	63	change_yielduom
+190	Can delete yield uom	63	delete_yielduom
 \.
 
 
@@ -2284,7 +2475,7 @@ COPY auth_permission (id, name, content_type_id, codename) FROM stdin;
 -- Name: auth_permission_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gerrard
 --
 
-SELECT pg_catalog.setval('auth_permission_id_seq', 166, true);
+SELECT pg_catalog.setval('auth_permission_id_seq', 190, true);
 
 
 --
@@ -2506,6 +2697,16 @@ COPY django_admin_log (id, action_time, object_id, object_repr, action_flag, cha
 68	2015-08-08 15:33:01.510694-04	7	Lower 1 - Summer Squash var. Patty Pan	2	Changed out_bed_date.	52	1
 69	2015-08-09 13:29:25.476915-04	1	HarvestRecord object	1		55	1
 70	2015-08-09 13:30:33.699599-04	1	HarvestRecord object	2	No fields changed.	55	1
+71	2015-08-10 16:27:20.27049-04	1	Buyer object	1		56	1
+72	2015-08-10 16:27:44.913996-04	1	DeliveryRecord object	1		57	1
+76	2015-08-10 17:02:18.829249-04	1	Pisticci --- 2015-08-10 16:27:25-04:00	2	Changed unit and price for delivery item "Arugula var. Astro - 3.0 kg @ 3.0 / kg". Changed unit and price for delivery item "Summer Squash var. Patty Pan - 9.0 kg @ 2.0 / kg". Changed unit and price for delivery item "Tomato var. Amish Paste - 5.0 kg @ 2.0 / kg".	57	1
+77	2015-08-10 17:02:44.724433-04	1	3.0 kg of Arugula var. Astro from Lower 1	2	Changed unit, amount and harvest_date.	55	1
+81	2015-08-10 17:05:38.70009-04	1	Pisticci --- 2015-08-10 16:27:25-04:00	2	No fields changed.	57	1
+82	2015-08-10 17:06:57.503165-04	1	Pisticci --- 2015-08-10 16:27:25-04:00	2	No fields changed.	57	1
+83	2015-08-10 17:34:12.982032-04	1	Arugula var. Astro @ 2.0 / kg	1		60	1
+84	2015-08-10 17:34:50.955949-04	2	Tomato var. Amish Paste @ 2.0 / kg	1		60	1
+85	2015-08-10 17:35:28.443173-04	2	Pisticci --- 2015-08-10 17:33:54-04:00	1		57	1
+86	2015-08-10 17:35:42.450913-04	2	Pisticci --- 2015-08-10 17:33:54-04:00	2	Added delivery item "Arugula var. Astro - 2.0 kg @ Arugula var. Astro @ 2.0 / kg".	57	1
 \.
 
 
@@ -2513,7 +2714,7 @@ COPY django_admin_log (id, action_time, object_id, object_repr, action_flag, cha
 -- Name: django_admin_log_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gerrard
 --
 
-SELECT pg_catalog.setval('django_admin_log_id_seq', 70, true);
+SELECT pg_catalog.setval('django_admin_log_id_seq', 86, true);
 
 
 --
@@ -2596,6 +2797,13 @@ COPY django_content_type (id, app_label, model) FROM stdin;
 52	grow_records	bedrecord
 54	grow_records	seederrecord
 55	grow_records	harvestrecord
+56	grow_records	buyer
+57	grow_records	deliveryrecord
+58	grow_records	deliveryitem
+60	grow_records	price
+61	grow_records	lengthuom
+62	grow_records	family
+63	grow_records	yielduom
 \.
 
 
@@ -2603,7 +2811,7 @@ COPY django_content_type (id, app_label, model) FROM stdin;
 -- Name: django_content_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gerrard
 --
 
-SELECT pg_catalog.setval('django_content_type_id_seq', 55, true);
+SELECT pg_catalog.setval('django_content_type_id_seq', 63, true);
 
 
 --
@@ -2676,6 +2884,13 @@ COPY django_migrations (id, app, name, applied) FROM stdin;
 63	grow_records	0010_auto_20150808_1531	2015-08-08 15:31:52.91056-04
 64	grow_records	0011_auto_20150809_1327	2015-08-09 13:27:21.636455-04
 65	grow_records	0012_auto_20150809_1330	2015-08-09 13:30:22.810724-04
+66	grow_records	0013_harvestrecord_harvest_date	2015-08-09 14:02:44.94095-04
+67	grow_records	0014_auto_20150810_1619	2015-08-10 16:19:50.461898-04
+68	grow_records	0015_auto_20150810_1626	2015-08-10 16:26:09.157391-04
+69	grow_records	0016_auto_20150810_1659	2015-08-10 16:59:10.007836-04
+70	grow_records	0017_auto_20150810_1659	2015-08-10 16:59:58.885535-04
+71	grow_records	0018_auto_20150810_1703	2015-08-10 17:03:57.823149-04
+72	grow_records	0019_auto_20150810_1729	2015-08-10 17:33:33.158108-04
 \.
 
 
@@ -2683,7 +2898,7 @@ COPY django_migrations (id, app, name, applied) FROM stdin;
 -- Name: django_migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gerrard
 --
 
-SELECT pg_catalog.setval('django_migrations_id_seq', 65, true);
+SELECT pg_catalog.setval('django_migrations_id_seq', 72, true);
 
 
 --
@@ -2916,6 +3131,22 @@ SELECT pg_catalog.setval('grow_records_block_id_seq', 2, true);
 
 
 --
+-- Data for Name: grow_records_buyer; Type: TABLE DATA; Schema: public; Owner: gerrard
+--
+
+COPY grow_records_buyer (id, name) FROM stdin;
+1	Pisticci
+\.
+
+
+--
+-- Name: grow_records_buyer_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gerrard
+--
+
+SELECT pg_catalog.setval('grow_records_buyer_id_seq', 1, true);
+
+
+--
 -- Data for Name: grow_records_commonname; Type: TABLE DATA; Schema: public; Owner: gerrard
 --
 
@@ -2959,6 +3190,36 @@ SELECT pg_catalog.setval('grow_records_crop_id_seq', 9, true);
 
 
 --
+-- Data for Name: grow_records_deliveryitem; Type: TABLE DATA; Schema: public; Owner: gerrard
+--
+
+COPY grow_records_deliveryitem (id, amount, delivery_record_id, variety_id, unit, price_id) FROM stdin;
+\.
+
+
+--
+-- Name: grow_records_deliveryitem_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gerrard
+--
+
+SELECT pg_catalog.setval('grow_records_deliveryitem_id_seq', 6, true);
+
+
+--
+-- Data for Name: grow_records_deliveryrecord; Type: TABLE DATA; Schema: public; Owner: gerrard
+--
+
+COPY grow_records_deliveryrecord (id, date, buyer_id) FROM stdin;
+\.
+
+
+--
+-- Name: grow_records_deliveryrecord_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gerrard
+--
+
+SELECT pg_catalog.setval('grow_records_deliveryrecord_id_seq', 2, true);
+
+
+--
 -- Data for Name: grow_records_genus; Type: TABLE DATA; Schema: public; Owner: gerrard
 --
 
@@ -2982,8 +3243,7 @@ SELECT pg_catalog.setval('grow_records_genus_id_seq', 5, true);
 -- Data for Name: grow_records_harvestrecord; Type: TABLE DATA; Schema: public; Owner: gerrard
 --
 
-COPY grow_records_harvestrecord (id, weight_kg, bed_record_id) FROM stdin;
-1	4.5	2
+COPY grow_records_harvestrecord (id, bed_record_id, harvest_date, amount, unit) FROM stdin;
 \.
 
 
@@ -3027,6 +3287,21 @@ COPY grow_records_potonrecord (id, pot_on_date, pot_size_in, medium_id, nursery_
 --
 
 SELECT pg_catalog.setval('grow_records_potonrecord_id_seq', 2, true);
+
+
+--
+-- Data for Name: grow_records_price; Type: TABLE DATA; Schema: public; Owner: gerrard
+--
+
+COPY grow_records_price (id, date, price, unit, variety_id) FROM stdin;
+\.
+
+
+--
+-- Name: grow_records_price_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gerrard
+--
+
+SELECT pg_catalog.setval('grow_records_price_id_seq', 2, true);
 
 
 --
@@ -3594,6 +3869,14 @@ ALTER TABLE ONLY grow_records_block
 
 
 --
+-- Name: grow_records_buyer_pkey; Type: CONSTRAINT; Schema: public; Owner: gerrard; Tablespace: 
+--
+
+ALTER TABLE ONLY grow_records_buyer
+    ADD CONSTRAINT grow_records_buyer_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: grow_records_commonname_pkey; Type: CONSTRAINT; Schema: public; Owner: gerrard; Tablespace: 
 --
 
@@ -3607,6 +3890,22 @@ ALTER TABLE ONLY grow_records_commonname
 
 ALTER TABLE ONLY grow_records_crop
     ADD CONSTRAINT grow_records_crop_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: grow_records_deliveryitem_pkey; Type: CONSTRAINT; Schema: public; Owner: gerrard; Tablespace: 
+--
+
+ALTER TABLE ONLY grow_records_deliveryitem
+    ADD CONSTRAINT grow_records_deliveryitem_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: grow_records_deliveryrecord_pkey; Type: CONSTRAINT; Schema: public; Owner: gerrard; Tablespace: 
+--
+
+ALTER TABLE ONLY grow_records_deliveryrecord
+    ADD CONSTRAINT grow_records_deliveryrecord_pkey PRIMARY KEY (id);
 
 
 --
@@ -3639,6 +3938,14 @@ ALTER TABLE ONLY grow_records_nurseryrecord
 
 ALTER TABLE ONLY grow_records_potonrecord
     ADD CONSTRAINT grow_records_potonrecord_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: grow_records_price_pkey; Type: CONSTRAINT; Schema: public; Owner: gerrard; Tablespace: 
+--
+
+ALTER TABLE ONLY grow_records_price
+    ADD CONSTRAINT grow_records_price_pkey PRIMARY KEY (id);
 
 
 --
@@ -4116,6 +4423,34 @@ CREATE INDEX grow_records_crop_92319714 ON grow_records_crop USING btree (genus_
 
 
 --
+-- Name: grow_records_deliveryitem_65cff675; Type: INDEX; Schema: public; Owner: gerrard; Tablespace: 
+--
+
+CREATE INDEX grow_records_deliveryitem_65cff675 ON grow_records_deliveryitem USING btree (price_id);
+
+
+--
+-- Name: grow_records_deliveryitem_921d5aa4; Type: INDEX; Schema: public; Owner: gerrard; Tablespace: 
+--
+
+CREATE INDEX grow_records_deliveryitem_921d5aa4 ON grow_records_deliveryitem USING btree (variety_id);
+
+
+--
+-- Name: grow_records_deliveryitem_c8c5be59; Type: INDEX; Schema: public; Owner: gerrard; Tablespace: 
+--
+
+CREATE INDEX grow_records_deliveryitem_c8c5be59 ON grow_records_deliveryitem USING btree (delivery_record_id);
+
+
+--
+-- Name: grow_records_deliveryrecord_2c724d65; Type: INDEX; Schema: public; Owner: gerrard; Tablespace: 
+--
+
+CREATE INDEX grow_records_deliveryrecord_2c724d65 ON grow_records_deliveryrecord USING btree (buyer_id);
+
+
+--
 -- Name: grow_records_harvestrecord_3ae13f9c; Type: INDEX; Schema: public; Owner: gerrard; Tablespace: 
 --
 
@@ -4148,6 +4483,13 @@ CREATE INDEX grow_records_potonrecord_464836be ON grow_records_potonrecord USING
 --
 
 CREATE INDEX grow_records_potonrecord_c20e5590 ON grow_records_potonrecord USING btree (medium_id);
+
+
+--
+-- Name: grow_records_price_921d5aa4; Type: INDEX; Schema: public; Owner: gerrard; Tablespace: 
+--
+
+CREATE INDEX grow_records_price_921d5aa4 ON grow_records_price USING btree (variety_id);
 
 
 --
@@ -4190,6 +4532,14 @@ CREATE INDEX polls_choice_7aa0f6ee ON polls_choice USING btree (question_id);
 --
 
 CREATE INDEX twitter_tweet_0bbeda9c ON twitter_tweet USING btree (query_id);
+
+
+--
+-- Name: D0735ea942c6e99a080924bfd6876b31; Type: FK CONSTRAINT; Schema: public; Owner: gerrard
+--
+
+ALTER TABLE ONLY grow_records_deliveryitem
+    ADD CONSTRAINT "D0735ea942c6e99a080924bfd6876b31" FOREIGN KEY (delivery_record_id) REFERENCES grow_records_deliveryrecord(id) DEFERRABLE INITIALLY DEFERRED;
 
 
 --
@@ -4569,11 +4919,27 @@ ALTER TABLE ONLY grow_records_bedrecord
 
 
 --
+-- Name: grow_rec_variety_id_32468d211e0c4a63_fk_grow_records_variety_id; Type: FK CONSTRAINT; Schema: public; Owner: gerrard
+--
+
+ALTER TABLE ONLY grow_records_price
+    ADD CONSTRAINT grow_rec_variety_id_32468d211e0c4a63_fk_grow_records_variety_id FOREIGN KEY (variety_id) REFERENCES grow_records_variety(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
 -- Name: grow_rec_variety_id_48eb1487f285e13b_fk_grow_records_variety_id; Type: FK CONSTRAINT; Schema: public; Owner: gerrard
 --
 
 ALTER TABLE ONLY grow_records_nurseryrecord
     ADD CONSTRAINT grow_rec_variety_id_48eb1487f285e13b_fk_grow_records_variety_id FOREIGN KEY (variety_id) REFERENCES grow_records_variety(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: grow_rec_variety_id_5007c86f3b0fb66c_fk_grow_records_variety_id; Type: FK CONSTRAINT; Schema: public; Owner: gerrard
+--
+
+ALTER TABLE ONLY grow_records_deliveryitem
+    ADD CONSTRAINT grow_rec_variety_id_5007c86f3b0fb66c_fk_grow_records_variety_id FOREIGN KEY (variety_id) REFERENCES grow_records_variety(id) DEFERRABLE INITIALLY DEFERRED;
 
 
 --
@@ -4609,11 +4975,27 @@ ALTER TABLE ONLY grow_records_bedrecord
 
 
 --
+-- Name: grow_records_buyer_id_29944361a7c6d113_fk_grow_records_buyer_id; Type: FK CONSTRAINT; Schema: public; Owner: gerrard
+--
+
+ALTER TABLE ONLY grow_records_deliveryrecord
+    ADD CONSTRAINT grow_records_buyer_id_29944361a7c6d113_fk_grow_records_buyer_id FOREIGN KEY (buyer_id) REFERENCES grow_records_buyer(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
 -- Name: grow_records_genus_id_5d466cd9f5317fa3_fk_grow_records_genus_id; Type: FK CONSTRAINT; Schema: public; Owner: gerrard
 --
 
 ALTER TABLE ONLY grow_records_crop
     ADD CONSTRAINT grow_records_genus_id_5d466cd9f5317fa3_fk_grow_records_genus_id FOREIGN KEY (genus_id) REFERENCES grow_records_genus(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: grow_records_price_id_54cfc5f1a3a3c48f_fk_grow_records_price_id; Type: FK CONSTRAINT; Schema: public; Owner: gerrard
+--
+
+ALTER TABLE ONLY grow_records_deliveryitem
+    ADD CONSTRAINT grow_records_price_id_54cfc5f1a3a3c48f_fk_grow_records_price_id FOREIGN KEY (price_id) REFERENCES grow_records_price(id) DEFERRABLE INITIALLY DEFERRED;
 
 
 --

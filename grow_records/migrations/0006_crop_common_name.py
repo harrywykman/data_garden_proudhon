@@ -7,17 +7,13 @@ from django.db import models, migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('grow_records', '0007_genus'),
+        ('grow_records', '0005_commonname_preferred'),
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='genus',
-            name='crop',
-        ),
         migrations.AddField(
             model_name='crop',
-            name='genus',
-            field=models.ForeignKey(to='grow_records.Genus', null=True),
+            name='common_name',
+            field=models.ForeignKey(to='grow_records.CommonName', null=True),
         ),
     ]
