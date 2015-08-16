@@ -293,12 +293,12 @@ class YieldUOM(models.Model):
 
 class HarvestRecord(models.Model):
     bed_record = models.ForeignKey(BedRecord, null=True)
-    yeild_UOM = models.ForeignKey(YieldUOM, null=True)
-    yeild_amount = models.FloatField('amount', default=0)
+    yield_UOM = models.ForeignKey(YieldUOM, null=True)
+    yield_amount = models.FloatField('amount', default=0)
     harvest_date = models.DateTimeField('harvest date', null=True)
 
     def __unicode__(self):                                                                                                                          
-        return "%s %s of %s from %s" % (self.amount, self.unit, 
+        return "%s %s of %s from %s" % (self.yield_amount, self.yield_UOM, 
                                      self.bed_record.variety, 
                                      self.bed_record.bed)
 
@@ -323,7 +323,7 @@ class Price(models.Model):
     price_UOM = models.ForeignKey(YieldUOM, null=True)
 
     def __unicode__(self):                                                                                                                          
-        return "%s @ %s / %s" % (self.variety, self.price, self.unit)
+        return "%s @ %s / %s" % (self.variety, self.price, self.price_UOM)
 
 class DeliveryItem(models.Model):
     delivery_record = models.ForeignKey(DeliveryRecord, null=True)
@@ -333,4 +333,4 @@ class DeliveryItem(models.Model):
     price = models.ForeignKey(Price, null=True)
 
     def __unicode__(self):                                                                                                                                                                                                                                        
-        return "%s - %s %s @ %s" % (self.variety, self.amount, self.unit, self.price) 
+        return "%s - %s %s @ %s" % (self.variety, self.delivery_amount, self.delivery_UOM, self.price) 
