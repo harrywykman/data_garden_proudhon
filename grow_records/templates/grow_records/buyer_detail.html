@@ -6,32 +6,20 @@
                                                                                                      
 {% block main %}
 
-<h1>Bed Name: {{ bed }}</h1>                                                  
+<h1>Buyer Name: {{ buyer }}</h1>                                                  
                                                                                        
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}           
 
-<h2>Bed Details</h2>
+<h2>Buyer Details</h2>
     
-<ul>
-    <li>bed location</li>
-        <ul>
-            <li>site: {{ bed.site }}</li>
-            <li>block: {{ bed.bed_set }}</li>
-        </ul>
-    <li>bed width (in): {{ bed.width_in }}</li>
-    <li>bed length (ft): {{ bed.length_ft }}</li> 
-</ul>
+<h2>Buyer Prices</h2>
 
-<h2>Bed Crop History</h2>
+<p>price list: {{ buyer.price_list_current }}</p>
 
 <ol>
-    {% for record in bed.bed_crop_history %}
+    {% for price in buyer.price_list_current %}
         <li> 
-            {% if record.in_ground %}
-                <strong>{{ record }} --- current crop</strong> 
-            {% else %} 
-                {{ record }}
-            {% endif %} 
+            <strong>{{ price }}</strong> 
         </li>
     {% endfor %}
 </ol>

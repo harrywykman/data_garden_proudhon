@@ -12,5 +12,9 @@ urlpatterns = [
     url(r'^crops/(?P<pk>[0-9]+)/$', views.CropDetailView.as_view(), name='crop_detail'),
     #url(r'^crop_history/(?P<pk>[0-9]+)/$', views.CropHistoryView.as_view(), name='crop_history'),
     url(r'^bed_records/$', views.BedRecordIndexView.as_view(), name='bed_record_index'),
+    url(r'^buyers/$', views.BuyerIndexView.as_view(), name='buyer_index'),
+    url(r'^buyers/(?P<pk>[0-9]+)/$', views.BuyerDetailView.as_view(), name='buyer_detail'),
+    url(r'^deliveries/$', views.DeliveryRecordIndexView.as_view(), name='delivery_index'),
+    url(r'^deliveries/(?P<pk>[0-9]+)/$', views.DeliveryRecordDetailView.as_view(), name='delivery_detail'),
 ]
 

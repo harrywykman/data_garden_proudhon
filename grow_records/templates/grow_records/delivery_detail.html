@@ -6,34 +6,23 @@
                                                                                                      
 {% block main %}
 
-<h1>Bed Name: {{ bed }}</h1>                                                  
+<h1>Buyer : {{ deliveryrecord.buyer }}</h1>                                                  
+<h1>Date : {{ deliveryrecord.date }}</h1>                                                  
                                                                                        
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}           
 
-<h2>Bed Details</h2>
-    
-<ul>
-    <li>bed location</li>
-        <ul>
-            <li>site: {{ bed.site }}</li>
-            <li>block: {{ bed.bed_set }}</li>
-        </ul>
-    <li>bed width (in): {{ bed.width_in }}</li>
-    <li>bed length (ft): {{ bed.length_ft }}</li> 
-</ul>
+<h2>Delivery Items</h2>
 
-<h2>Bed Crop History</h2>
+<p> list: {{ deliveryrecord.items }}</p>
 
 <ol>
-    {% for record in bed.bed_crop_history %}
+    {% for item in deliveryrecord.items %}
         <li> 
-            {% if record.in_ground %}
-                <strong>{{ record }} --- current crop</strong> 
-            {% else %} 
-                {{ record }}
-            {% endif %} 
+            <strong>{{ item }}</strong> --- value: $ {{ item.value }}
         </li>
     {% endfor %}
 </ol>
+
+<h2>Delivery Total: {{deliveryrecord.value }} </h2>
 
 {% endblock %}

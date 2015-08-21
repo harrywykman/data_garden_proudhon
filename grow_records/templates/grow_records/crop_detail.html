@@ -14,6 +14,7 @@
 
 <ul>
     <li>botanical name: {{ crop.genus }} {{ crop.species }}</li>
+    <li>common name: {{ crop.pref_common_name }} </li>
 </ul>
 
 <h2>Varieties</h2>
@@ -24,12 +25,11 @@
     {% endfor %}
 </ul>
 
-<h2>Crop History</h2>                                                                                                                                          
-                                                                                                                                                                   
-<ol>                                                                                                                                                               
-    {% for record in crop.crop_history %}                                                                                                                       
-        <li> {{ record }} </li>                                                                                                                                    
-    {% endfor %}                                                                                                                                                   
+<h2>Crop History</h2>                                                                                       
+<ol>                                                                                                        
+    {% for record in crop.crop_history %}  
+        <li> {{ record }} </li>                                                                            
+    {% endfor %}                                                                                            
 </ol> 
 
 {% endblock %}

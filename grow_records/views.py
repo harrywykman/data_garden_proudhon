@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.views import generic
 from django.utils import timezone
 
-from .models import Bed, Crop, BedRecord
+from .models import Bed, Crop, BedRecord, Buyer, DeliveryRecord
 
 # Create your views here.
 
@@ -26,6 +26,46 @@ class DetailView(generic.DetailView):
         Excludes any questions that aren't published yet.                              
         """                                                                            
         return Bed.objects.all() 
+
+class BuyerIndexView(generic.ListView):                                                                             
+    template_name = 'grow_records/buyer_index.html'                                                                 
+    context_object_name = 'buyer_list'                                                                              
+                                                                                                                  
+    def get_queryset(self):                                                                                       
+        """                                                                                                       
+        Return all buyers.                                                                                          
+        """                                                                                                       
+        return Buyer.objects.all()
+
+class BuyerDetailView(generic.DetailView):                                                                          
+    model = Buyer                                                                                                   
+    template_name = 'grow_records/buyer_detail.html'                                                                
+                                                                                                                  
+    def get_queryset(self):                                                                                       
+        """                                                                                                       
+        Excludes any questions that aren't published yet.                                                         
+        """                                                                                                       
+        return Buyer.objects.all()
+
+class DeliveryRecordIndexView(generic.ListView):                                                                           
+    template_name = 'grow_records/delivery_index.html'                                                               
+    context_object_name = 'delivery_record_list'                                                                            
+                                                                                                                  
+    def get_queryset(self):                                                                                       
+        """                                                                                                       
+        Return all buyers.                                                                                        
+        """                                                                                                       
+        return DeliveryRecord.objects.all()                                                                                
+                                                                                                                  
+class DeliveryRecordDetailView(generic.DetailView):                                                                        
+    model = DeliveryRecord                                                                                                 
+    template_name = 'grow_records/delivery_detail.html'                                                              
+                                                                                                                  
+    def get_queryset(self):                                                                                       
+        """                                                                                                       
+        Excludes any questions that aren't published yet.                                                         
+        """                                                                                                       
+        return DeliveryRecord.objects.all()
 
 class BedIndexView(generic.ListView):
     template_name = 'grow_records/bed_index.html'
@@ -67,7 +107,7 @@ class CropIndexView(generic.ListView):
         """                                                                     
         Return all crops.                                                        
         """                                                                     
-        return Crop.objects.all().order_by('common_name__name')
+        return Crop.objects.all().order_by('commonname__name')
 
 class CurrentCropsIndexView(generic.ListView):                                          
     models = BedRecord
@@ -78,7 +118,8 @@ class CurrentCropsIndexView(generic.ListView):
         """                                                                     
         Return list of current crops.                                                       
         """
-        return BedRecord.objects.filter(out_bed_date__isnull=True).order_by('variety__crop__common_name__name')
+        return BedRecord.objects.filter(out_bed_date__isnull=True).order_by('variety')
+        #return BedRecord.objects.filter(out_bed_date__isnull=True).order_by('variety__crop__commonname__name')
         #return BedRecord.objects.filter(out_bed_date__isnull=True).distinct('variety__crop__common_name__name', 'variety').order_by('variety__crop__common_name__name')
             
 

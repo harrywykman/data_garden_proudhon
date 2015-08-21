@@ -1,5 +1,5 @@
 from models import (
-                    Site, Block, Family, Bed, Genus, Species, Crop, 
+                    Site, BedSet, Family, Bed, Genus, Species, Crop, 
                     CommonName, LengthUOM
                    )
 
@@ -248,7 +248,7 @@ def populate_crops():
             print "    Crop ", common_name, " already exists in database."          
             existing_crop = existing_crop[0]
         else:                                                                   
-            c = Crop(species=existing_species, name=common_name)                                          
+            c = Crop(species=existing_species)                                          
             c.save()                               
             existing_crop = c                             
             print '    Saved', common_name, "as Crop."
@@ -281,13 +281,13 @@ def populate_blocks():
         existing_site = s
 
     for block_name in BLOCKS:
-        existing_block = Block.objects.filter(name=block_name, site=existing_site)
+        existing_block = BedSet.objects.filter(name=block_name, site=existing_site)
 
         if existing_block.count() > 0:
             print "    Block ", block_name, " already exists in database."
             existing_block = existing_block[0]
         else:
-            b = Block(name=block_name, site=s)
+            b = BedSet(name=block_name, site=existing_site)
             b.save()
             existing_block = b
             print '    Saved', block_name, "as Block."
@@ -324,7 +324,7 @@ def populate_blocks():
             width_UOM = existing_width_UOM
             length_UOM = existing_length_UOM         
                                                                                                    
-            existing_bed = Bed.objects.filter(name=bed_name, block=existing_block)                                   
+            existing_bed = Bed.objects.filter(name=bed_name, bed_set=existing_block)                                   
 
             if existing_bed.count() > 0:                                                                         
                 print "    Bed ", bed_name, "in ", existing_block, " already exists in database."                                           
@@ -332,7 +332,7 @@ def populate_blocks():
             else:                                                                                                  
                 b = Bed(
                         site = existing_site,
-                        block = existing_block,
+                        bed_set = existing_block,
                         name = bed_name, 
                         width = width, 
                         width_UOM = width_UOM, 
