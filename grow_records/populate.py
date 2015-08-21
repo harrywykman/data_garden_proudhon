@@ -242,8 +242,7 @@ def populate_crops():
             print '    Saved', species, "as Species."
 
                                                                                 
-        existing_crop = Crop.objects.filter(species=existing_species, 
-                                            name=common_name)      
+        existing_crop = Crop.objects.filter(species=existing_species)      
         if existing_crop.count() > 0:                                        
             print "    Crop ", common_name, " already exists in database."          
             existing_crop = existing_crop[0]
