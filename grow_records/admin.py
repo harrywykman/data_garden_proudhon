@@ -27,9 +27,9 @@ class NurseryRecordAdmin(admin.ModelAdmin):
     inlines = [PotOnRecordInline]
 
 
-class BedRecordInline(admin.TabularInline):
-    model = BedRecord
-    extra = 3
+#class BedRecordInline(admin.TabularInline):
+#    model = BedRecord
+#    extra = 3
 
 class BedAdmin(admin.ModelAdmin):
     list_display = ('name', 'site', 'bed_set', 'width', 'width_UOM', 
@@ -45,7 +45,7 @@ class BedAdmin(admin.ModelAdmin):
         ('length',   {'fields': ['length']}),
         ('length unit',  {'fields': ['length_UOM']}),
     ]
-    inlines = [BedRecordInline]
+#    inlines = [BedRecordInline]
 
 
 class BedSetAdmin(admin.ModelAdmin):
