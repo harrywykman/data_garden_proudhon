@@ -250,8 +250,8 @@ class NurseryRecord(models.Model):
 
 class PotOnRecord(models.Model):                                                
     pot_on_date = models.DateField('date potted on', default=timezone.now) 
-    pot_size_in = models.IntegerField('pot size \(inches\)', null=True)         
-    medium = models.ForeignKey(SoilMediumBatch, null=True)
+    pot_size_in = models.IntegerField('pot size \(inches\)', null=True, blank=True)         
+    medium = models.ForeignKey(SoilMediumBatch, null=True, blank=True)
     nursery_record = models.ForeignKey(NurseryRecord, null=True)
 
     def __unicode__(self):                                                                                                                          
