@@ -36,4 +36,12 @@
     {% endfor %}
 </ol>
 
+<h2>Bed Action History</h2>
+
+<ol>                                                                                                              
+    {% for action in bed.actions %}                                                                      
+        <li> {{ action }} </li>                                                                                                     
+    {% endfor %}                                                                                                  
+</ol> 
+
 {% endblock %}

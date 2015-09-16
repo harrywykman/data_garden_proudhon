@@ -1,51 +1,61 @@
 import datetime
+import moneyed
 
 from django.db import models
 from django.utils import timezone
 
-# Create your models here.
+from moneyed import Money, USD, AUD
+from djmoney.models.fields import MoneyField
+from django_measurement.models import MeasurementField
+from measurement.measures import Weight, Volume, Area
+from model_utils.managers import InheritanceManager
+from address.models import AddressField
 
-class AreaUOM(models.Model):                                                                                  
-    FEET = 'ft2'                                                                                                 
-    METRES = 'm2'                                                                                                
+#TODO Use django measurement (https://pypi.python.org/pypi/django-measurement/)
+class AreaUOM(models.Model):
+    FEET = 'ft2'
+    METRES = 'm2'
     ACRES = 'ac'
     HECTARES = 'ha'
-    AREA_UNIT_CHOICES = (                                                                                     
-        (FEET, 'ft^2'),                                                                                           
-        (METRES, 'm^2')                                                                                           
-    )                           
-    unit = models.CharField(max_length=4, choices=AREA_UNIT_CHOICES)                                          
-                                                                                                                
-    def __unicode__(self):                                                                                      
-        return self.unit 
+    AREA_UNIT_CHOICES = (
+        (FEET, 'ft^2'),
+        (METRES, 'm^2')
+    )
+    unit = models.CharField(max_length=4, choices=AREA_UNIT_CHOICES)
 
+    def __unicode__(self):
+        return self.unit
+
+class Location(models.Model):
+    name = models.CharField(max_length=200)
 
 class Site(models.Model):
     name = models.CharField(max_length=200)
-    area = models.IntegerField(null=True)                                                                     
+    area = models.IntegerField(null=True)
     area_UOM = models.ForeignKey(
-                                 AreaUOM, 
-                                 related_name="site_area_UOM", 
+                                 AreaUOM,
+                                 related_name="site_area_UOM",
                                  null=True
                                 )
-    
+
     def __unicode__(self):
         return self.name
 
 
 class BedSet(models.Model):
-    site = models.ForeignKey(Site, null=True)
     name = models.CharField(max_length=200)
+    site = models.ForeignKey(Site, null=True)
 
-    def __unicode__(self):                                                                             
-        return self.name 
+    def __unicode__(self):
+        return self.name
 
+#TODO Use django measurement (https://pypi.python.org/pypi/django-measurement/)
 class LengthUOM(models.Model):
     INCHES = 'in'
-    FEET = 'ft'                                                                                                                                     
+    FEET = 'ft'
     MILLIMETRES = 'mm'
-    METRES = 'm'                                                                                                                                       
-    LENGTH_UNIT_CHOICES = (                                                                                                                                    
+    METRES = 'm'
+    LENGTH_UNIT_CHOICES = (
         (INCHES, 'in'),
         (FEET, 'ft'),
         (MILLIMETRES, 'mm'),
@@ -53,7 +63,7 @@ class LengthUOM(models.Model):
     )
     unit = models.CharField(max_length=2, choices=LENGTH_UNIT_CHOICES)
 
-    def __unicode__(self):                                                                                                                          
+    def __unicode__(self):
         return self.unit
 
 
@@ -63,51 +73,54 @@ class Bed(models.Model):
     name = models.CharField(max_length=200)
     width = models.IntegerField(default=30)
     width_UOM = models.ForeignKey(
-                                  LengthUOM, 
-                                  related_name="bed_width_UOM", 
+                                  LengthUOM,
+                                  related_name="bed_width_UOM",
                                   null=True)
     length = models.IntegerField()
     length_UOM = models.ForeignKey(
-                                   LengthUOM, 
-                                   related_name="bed_length_UOM", 
+                                   LengthUOM,
+                                   related_name="bed_length_UOM",
                                    null=True
                                   )
 
     def bed_crop_history(self):
         return self.bedrecord_set.all().order_by('-in_bed_date')
 
-    def __unicode__(self):                                                                             
+    def actions(self):
+        return self.bedinteraction_set.all().select_subclasses().order_by('end_time')
+
+    def __unicode__(self):
         if self.bed_set:
             name = "%s %s" % (self.bed_set.name, self.name)
             return name
-        return self.name 
+        return self.name
 
     # returns area of bed
     #TODO create conversion methods for units to be able to calculate area
-    # in standard measurement (imperial - ft, acres; metric - m, ha) 
+    # in standard measurement (imperial - ft, acres; metric - m, ha)
     def area():
-        pass   
+        pass
 
 class Family(models.Model):
     name = models.CharField(max_length=100)
 
-    def __unicode__(self):                                                                                                                          
+    def __unicode__(self):
         return self.name
 
 class Genus(models.Model):
     name = models.CharField(max_length=100)
-    family = models.ForeignKey(Family, null=True)                                                                                
+    family = models.ForeignKey(Family, null=True)
 
-    def __unicode__(self):                                                      
+    def __unicode__(self):
         return self.name
 
-class Species(models.Model):                                                    
+class Species(models.Model):
     species = models.CharField(max_length=100)
     genus = models.ForeignKey(Genus, null=True)
-                                                                                
-    def __unicode__(self):                                                      
+
+    def __unicode__(self):
         return "%s %s" % (self.genus, self.species)
-    
+
     __unicode__.admin_order_field = 'genus'
 
     def common_name():
@@ -120,8 +133,8 @@ class Species(models.Model):
 
 class Crop(models.Model):
     species = models.ForeignKey(Species, null=True)
-    
-    def pref_common_name(self):                                                                                          
+
+    def pref_common_name(self):
         pcn = self.commonname_set.all().filter(preferred=True)
         count = pcn.count()
         if count > 0:
@@ -138,12 +151,12 @@ class Crop(models.Model):
 
     family.admin_order_field = 'species__genus__family'
 
-    def genus(self):                                                                                           
+    def genus(self):
         return self.species.genus
 
     genus.admin_order_field = 'species__genus'
 
-    def crop_history(self):                                                                    
+    def crop_history(self):
         varieties = self.variety_set.all()
         bed_records = []
         for variety in varieties:
@@ -161,10 +174,10 @@ class Crop(models.Model):
             return False
         return True
 
-    def in_nursery(self):                                                                           
-        """                                                                                        
-        Returns True is crop is currently in nursery.                                                
-        """                                                                                        
+    def in_nursery(self):
+        """
+        Returns True is crop is currently in nursery.
+        """
         pass
 
     def varieties(self):
@@ -173,10 +186,10 @@ class Crop(models.Model):
         """
         return self.variety_set.all()
 
-class CommonName(models.Model):                                                                                 
-    name = models.CharField(max_length=100, null=True)                                                                     
+class CommonName(models.Model):
+    name = models.CharField(max_length=100, null=True)
     preferred = models.BooleanField(default=False)
-    crop = models.ForeignKey(Crop, null=True)                                                                   
+    crop = models.ForeignKey(Crop, null=True)
 
     def save(self, *args, **kwargs):
         if self.preferred:
@@ -188,20 +201,20 @@ class CommonName(models.Model):
             except CommonName.DoesNotExist:
                 pass
         super(CommonName, self).save(*args, **kwargs)
-                                                                                                                
-    def __unicode__(self):                                                                                      
+
+    def __unicode__(self):
         return self.name
 
 class Variety(models.Model):
     crop = models.ForeignKey(Crop, null=True)
     name = models.CharField(max_length=100)
-    
+
     def __unicode__(self):
         if self.crop:
             name = "%s var. %s" % (self.crop, self.name)
             return name
-        return self.name 
-    
+        return self.name
+
     def current_price():
         pass
 
@@ -213,7 +226,7 @@ class Variety(models.Model):
         else:
             return None
 
-    def print_current_price(self):                                                                                                                        
+    def print_current_price(self):
         price = self.varietyprice_set.all().filter(date_end=None).order_by('date_effective')
         if price:
             return "%s / %s" % (price[0].price, price[0].price_UOM)
@@ -221,19 +234,23 @@ class Variety(models.Model):
             return "No price set for this variety"
 
 class SoilMediumBatch(models.Model):
-    created = models.DateField('date medium created', default=timezone.now) 
+    created = models.DateField('date medium created', default=timezone.now)
     recipe = models.CharField(max_length=300)
     #TODO recipe should be quantities of inputs in models Inputs
 
-    def __unicode__(self):                                                                                                                          
+    def __unicode__(self):
         return "Soil Medium created %s" % self.created
 
+class PlantRecord(models.Model):
+    pass
+    #variety = models.ForeignKey(Variety, null=True)
 
+# better if CHILD of PlantRecord
 class NurseryRecord(models.Model):
     variety = models.ForeignKey(Variety, null=True)
     in_nursery_date = models.DateField(
-                                       'date of propagation', 
-                                        null=True, 
+                                       'date of propagation',
+                                        null=True,
                                        default=timezone.now)
     germ_date = models.DateField('date of germination', null=True, blank=True)
     tray_size_cell = models.IntegerField('tray size \(number cells\)', \
@@ -242,21 +259,21 @@ class NurseryRecord(models.Model):
     medium = models.ForeignKey(SoilMediumBatch, null=True)
 
     def __unicode__(self):
-        name = self.in_nursery_date.strftime('%Y-%m-%d %H:%M') 
+        name = self.in_nursery_date.strftime('%Y-%m-%d %H:%M')
         if self.variety:
             name = "%s %s" % (self.variety, name)
         return name
 
 
-class PotOnRecord(models.Model):                                                
-    pot_on_date = models.DateField('date potted on', default=timezone.now) 
-    pot_size_in = models.IntegerField('pot size \(inches\)', null=True, blank=True)         
+class PotOnRecord(models.Model):
+    pot_on_date = models.DateField('date potted on', default=timezone.now)
+    pot_size_in = models.IntegerField('pot size \(inches\)', null=True, blank=True)
     medium = models.ForeignKey(SoilMediumBatch, null=True, blank=True)
     nursery_record = models.ForeignKey(NurseryRecord, null=True)
 
-    def __unicode__(self):                                                                                                                          
+    def __unicode__(self):
         return "Potted on %s on %s" % (
-                                        self.nursery_record.variety, 
+                                        self.nursery_record.variety,
                                         self.pot_on_date
                                       )
 
@@ -287,23 +304,23 @@ class SeederRecord (models.Model):
     name = models.CharField(max_length=2, choices=SEEDER_CHOICES)
     seeder_settings = models.CharField(max_length=100, null=True)
 
-
+# better if CHILD of PlantRecord
 class BedRecord(models.Model):
     in_bed_date = models.DateField(
-                                   'transplant or seeding date', 
-                                   null=True, 
+                                   'transplant or seeding date',
+                                   null=True,
                                    default=timezone.now
                                   )
     out_bed_date = models.DateField('date crop removed', null=True, blank=True)
-    bed = models.ForeignKey(Bed, null=True) 
+    bed = models.ForeignKey(Bed, null=True)
     variety = models.ForeignKey(Variety, null=True)
     nursery_record = models.ForeignKey(NurseryRecord, null=True, blank=True)
     rows = models.IntegerField(null=True)
     spacing_in = models.IntegerField('spacing \(inches\)', null=True)
     seeder = models.ForeignKey(SeederRecord, null=True, blank=True)
     bed_percent = models.IntegerField(
-                                      'percentage of bed for crop', 
-                                      default=100, 
+                                      'percentage of bed for crop',
+                                      default=100,
                                       null=True)
 
     # TODO - redundant method given crop.inground?
@@ -316,24 +333,24 @@ class BedRecord(models.Model):
 
     def __unicode__(self):
         if self.variety and self.bed:
-            name = "%s - %s" % (self.bed, self.variety) 
-        return name 
+            name = "%s - %s" % (self.bed, self.variety)
+        return name
 
-
+#TODO Use django measurement (https://pypi.python.org/pypi/django-measurement/)
 class YieldUOM(models.Model):
-    KILOGRAMS = 'kg'                                                                                                                                   
-    GRAMS = 'g'                                                                                                                                     
-    POUNDS = 'lb'                                                                                                                              
-    OUNCES= 'oz'                                                                                                                                    
-    YIELD_UNIT_CHOICES = (                                                                                                                         
-        (KILOGRAMS, 'kg'),                                                                                                                             
-        (GRAMS, 'g'),                                                                                                                               
-        (POUNDS, 'lb'),                                                                                                                        
-        (OUNCES, 'oz')                                                                                                                               
+    KILOGRAMS = 'kg'
+    GRAMS = 'g'
+    POUNDS = 'lb'
+    OUNCES= 'oz'
+    YIELD_UNIT_CHOICES = (
+        (KILOGRAMS, 'kg'),
+        (GRAMS, 'g'),
+        (POUNDS, 'lb'),
+        (OUNCES, 'oz')
     )
     unit = models.CharField(max_length=2, choices=YIELD_UNIT_CHOICES)
-    
-    def __unicode__(self):                                                                                                                          
+
+    def __unicode__(self):
         return self.unit
 
 
@@ -342,14 +359,14 @@ class HarvestRecord(models.Model):
     yield_UOM = models.ForeignKey(YieldUOM, null=True)
     yield_amount = models.FloatField('amount', default=0)
     harvest_date = models.DateField(
-                                    'harvest date', 
-                                    null=True, 
+                                    'harvest date',
+                                    null=True,
                                     default=timezone.now
                                    )
 
-    def __unicode__(self):                                                                                                                          
-        return "%s %s of %s from %s" % (self.yield_amount, self.yield_UOM, 
-                                     self.bed_record.variety, 
+    def __unicode__(self):
+        return "%s %s of %s from %s" % (self.yield_amount, self.yield_UOM,
+                                     self.bed_record.variety,
                                      self.bed_record.bed)
 
 class Buyer(models.Model):
@@ -358,12 +375,12 @@ class Buyer(models.Model):
     def price_list_current(self):
         return self.buyervarietyprice_set.all().filter(date_end__isnull=True).order_by('-variety__crop')
 
-    def __unicode__(self):                                                                                                                          
+    def __unicode__(self):
         return self.name
 
-    
+
 class DeliveryRecord(models.Model):
-    date = models.DateField('delivery_date', null=True, default=timezone.now)    
+    date = models.DateField('delivery_date', null=True, default=timezone.now)
     buyer = models.ForeignKey(Buyer, null=True)
 
     def items(self):
@@ -376,54 +393,20 @@ class DeliveryRecord(models.Model):
             value += item.value()
         return value
 
-    def __unicode__(self):                                                                                                                          
+    def __unicode__(self):
         return "%s --- %s" % (self.buyer, self.date)
 
 
 class VarietyPrice(models.Model):
     variety = models.ForeignKey(Variety, null=True)
     date_effective = models.DateTimeField(
-                                      'date price set', 
-                                      null=True, 
+                                      'date price set',
+                                      null=True,
                                       default=timezone.now
                                      )
     date_end = models.DateTimeField('date price expires', null=True, blank=True)
+    #TODO make MoneyField (https://pypi.python.org/pypi/django-moneyfield/0.2.1)
     price = models.FloatField('price', default=0, null=True)
-    price_UOM = models.ForeignKey(YieldUOM, null=True)
-
-    def save(self, *args, **kwargs):                                                                              
-        now = timezone.now()                                                                                      
-        print self.date_effective                                                                                 
-        print self.date_end                                                                                       
-        test = self.date_effective < now and not self.date_end                                                    
-        print test                                                                                                
-        if self.date_effective < now and not self.date_end:                                                       
-            try:                                                                                                  
-                temp = VarietyPrice.objects.get(
-                                                variety=self.variety, 
-                                                date_end=None
-                                               )       
-                if self != temp:                                                                                  
-                    print "Temp record exists"                                                                    
-                    temp.date_end = now                                                                           
-                    temp.save()                                                                                   
-            except VarietyPrice.DoesNotExist:                                                                
-                pass                                                                                              
-        super(VarietyPrice, self).save(*args, **kwargs)
-
-    def __unicode__(self):                                                                                                                          
-        return "%s @ %s / %s" % (self.variety, self.price, self.price_UOM)
-
-class BuyerVarietyPrice(models.Model):
-    variety = models.ForeignKey(Variety, null=True)
-    buyer = models.ForeignKey(Buyer, null=True)
-    date_effective = models.DateTimeField(                                                                            
-                                      'date price set',                                                           
-                                      null=True,                                                                  
-                                      default=timezone.now                                                        
-                                     )                                                                            
-    date_end = models.DateTimeField('date price expires', null=True, blank=True)                                      
-    price = models.FloatField('price', default=0, null=True)                                                      
     price_UOM = models.ForeignKey(YieldUOM, null=True)
 
     def save(self, *args, **kwargs):
@@ -432,19 +415,54 @@ class BuyerVarietyPrice(models.Model):
         print self.date_end
         test = self.date_effective < now and not self.date_end
         print test
-        if self.date_effective < now and not self.date_end:                                                                                        
-            try:                                                                                                  
-                temp = BuyerVarietyPrice.objects.get(buyer=self.buyer, variety=self.variety, date_end=None)                                     
-                if self != temp:                                                                                  
+        if self.date_effective < now and not self.date_end:
+            try:
+                temp = VarietyPrice.objects.get(
+                                                variety=self.variety,
+                                                date_end=None
+                                               )
+                if self != temp:
                     print "Temp record exists"
-                    temp.date_end = now                                                                        
-                    temp.save()                                                                                   
-            except BuyerVarietyPrice.DoesNotExist:                                                                       
-                pass                                                                                              
+                    temp.date_end = now
+                    temp.save()
+            except VarietyPrice.DoesNotExist:
+                pass
+        super(VarietyPrice, self).save(*args, **kwargs)
+
+    def __unicode__(self):
+        return "%s @ %s / %s" % (self.variety, self.price, self.price_UOM)
+
+class BuyerVarietyPrice(models.Model):
+    variety = models.ForeignKey(Variety, null=True)
+    buyer = models.ForeignKey(Buyer, null=True)
+    date_effective = models.DateTimeField(
+                                      'date price set',
+                                      null=True,
+                                      default=timezone.now
+                                     )
+    date_end = models.DateTimeField('date price expires', null=True, blank=True)
+    price = models.FloatField('price', default=0, null=True)
+    price_UOM = models.ForeignKey(YieldUOM, null=True)
+
+    def save(self, *args, **kwargs):
+        now = timezone.now()
+        print self.date_effective
+        print self.date_end
+        test = self.date_effective < now and not self.date_end
+        print test
+        if self.date_effective < now and not self.date_end:
+            try:
+                temp = BuyerVarietyPrice.objects.get(buyer=self.buyer, variety=self.variety, date_end=None)
+                if self != temp:
+                    print "Temp record exists"
+                    temp.date_end = now
+                    temp.save()
+            except BuyerVarietyPrice.DoesNotExist:
+                pass
         super(BuyerVarietyPrice, self).save(*args, **kwargs)
 
-    def __unicode__(self):                                                                                        
-        return "%s - %s @ %s / %s" % (self.buyer, self.variety, self.price, self.price_UOM) 
+    def __unicode__(self):
+        return "%s - %s @ %s / %s" % (self.buyer, self.variety, self.price, self.price_UOM)
 
 class DeliveryItem(models.Model):
     delivery_record = models.ForeignKey(DeliveryRecord, null=True)
@@ -456,7 +474,7 @@ class DeliveryItem(models.Model):
         buyer = self.delivery_record.buyer
         date = self.delivery_record.date
         #TODO change ASSUMPTION delivery_UOM == price_UOM for now
-        #TODO change ASSUMPTION price at delivery record date is current price 
+        #TODO change ASSUMPTION price at delivery record date is current price
         current_price_tuple = self.variety.current_buyer_price(buyer)
         current_price = current_price_tuple[0]
         print current_price
@@ -464,9 +482,87 @@ class DeliveryItem(models.Model):
         print value
         return value
 
-    def __unicode__(self):                                                                                                                                                                                                                                        
+    def __unicode__(self):
         return "%s - %s %s" % (
-                               self.variety, 
-                               self.delivery_amount, 
+                               self.variety,
+                               self.delivery_amount,
                                self.delivery_UOM
-                              ) 
+                              )
+
+class Tool(models.Model):
+    name = models.CharField(max_length=200)
+
+class Action(models.Model):
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField()
+    # location = models.ForeignKey(Location, null=True)
+    # tools
+    description = models.TextField(null=True, blank=True)
+
+    objects = InheritanceManager()
+
+    def duration(self):
+        delta = self.end_time - self.start_time
+        minutes = delta.seconds / 60
+        return "%s minutes" % (minutes)
+
+    def __unicode__(self):
+        duration = self.duration()
+        return "ACTION: %s | DURATION: %s" % (
+                               self.description,
+                               duration
+                              )
+
+
+class PlantInteraction(Action):
+    bed_record = models.ForeignKey(BedRecord, null=True, blank=True)
+    nursery_record = models.ForeignKey(NurseryRecord, null=True, blank=True)
+
+class FertiliseInnoculate(PlantInteraction):
+    recipe = models.TextField(null=True)
+
+    def __unicode__(self):
+        duration = self.duration()
+        if self.bed_record:
+            variety = self.bed_record.variety
+        elif self.nursery_record:
+            variety = self.nursery_record.variety
+
+        return "FERTILISED / INNOCULATED: %s | CROP: %s| DURATION: %s" % (
+                               self.description,
+                               variety,
+                               duration
+                              )
+
+class Protect(PlantInteraction):
+    pass
+
+class BedInteraction(Action):
+    beds = models.ManyToManyField(Bed)
+    #bed = models.ForeignKey(Bed, null=True)
+
+    objects = InheritanceManager()
+
+class AmmendInnoculate(BedInteraction):
+    recipe = models.TextField(null=True)
+
+    def __unicode__(self):
+        duration = self.duration()
+        return "AMMEND / INNOCULATE: %s | %s | DURATION: %s" % (
+                               self.description,
+                               self.recipe,
+                               duration
+                              )
+
+
+class Supplier(models.Model):
+    name = models.CharField(max_length=200)
+    address = AddressField()
+
+
+class Input(models.Model):
+    description = models.CharField(max_length=200) 
+    supplier = models.ForeignKey(Supplier)
+    price = MoneyField(max_digits=10, decimal_places=2, default_currency='USD')
+    weight = MeasurementField(measurement=Weight, null=True, blank=True)
+    volume = MeasurementField(measurement=Volume, null=True, blank=True) 

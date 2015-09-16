@@ -5,22 +5,12 @@
 {% block title %}{% trans "Grow Records" %}{% endblock %}                                            
                                                                                                      
 {% block main %}                                                                                                                           
-{% if record_list %}                                                                                              
-<form action="{% url 'grow_records:action' %}" method="post">                                                 
-{% csrf_token %}
-
+{% if action_list %}                                                                                              
     <ul>                                                                                                                   
-    {% for record in record_list %}                                                                             
-        <li><input type="checkbox" name="choice" id="choice{{ forloop.counter }}" value="{{ record.id }}" />                
-        <label for="choice{{ forloop.counter }}">{{ record.variety }}</label><br /></li>
-        <li><a href="{% url 'grow_records:crop_detail' record.variety.crop.id %}">{{ record.variety }}</a> 
-            is in <a href="{% url 'grow_records:bed_detail' record.bed.id %}"> {{ record.bed }}</a></li>                           
+    {% for action in action_list %}                                                                             
+        <li><a href="{% url 'grow_records:action_detail' action.id %}">{{ action }}</a></li>                           
     {% endfor %}                                                                                                           
-    </ul>                        
-
-<input type="submit" value="Act" />                                                                             
-</form>
-                                                                                          
+    </ul>                                                                                                                  
 {% else %}                                                                                                                 
     <p>No crops are available.</p>                                                                                         
 {% endif %}          

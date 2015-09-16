@@ -16,5 +16,9 @@ urlpatterns = [
     url(r'^buyers/(?P<pk>[0-9]+)/$', views.BuyerDetailView.as_view(), name='buyer_detail'),
     url(r'^deliveries/$', views.DeliveryRecordIndexView.as_view(), name='delivery_index'),
     url(r'^deliveries/(?P<pk>[0-9]+)/$', views.DeliveryRecordDetailView.as_view(), name='delivery_detail'),
+    url(r'^actions/$', views.ActionIndexView.as_view(), name='action_index'),                        
+    url(r'^actions/(?P<pk>[0-9]+)/$', views.ActionDetailView.as_view(), name='action_detail'),
+    url(r'^act/$', views.ActionView.as_view(), name='action'),
+    url(r'^ammend_innoculate/$', views.AmmendInnoculateCreate.as_view(), name='ammendinnoculate_form'),
 ]
 

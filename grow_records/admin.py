@@ -2,12 +2,13 @@ from django.contrib import admin
 
 # Register your models here.
 
-from .models import (Crop, Variety, Genus, Species, 
-                        CommonName, Bed, BedSet, Site, SoilMediumBatch, 
+from .models import (Crop, Variety, Genus, Species,
+                        CommonName, Bed, BedSet, Site, SoilMediumBatch,
                         PotOnRecord, NurseryRecord, BedRecord, SeederRecord,
-                        HarvestRecord, Buyer, DeliveryRecord, DeliveryItem, 
+                        HarvestRecord, Buyer, DeliveryRecord, DeliveryItem,
                         VarietyPrice, Family, LengthUOM, YieldUOM, AreaUOM,
-                        BuyerVarietyPrice
+                        BuyerVarietyPrice, Action, FertiliseInnoculate,
+                        AmmendInnoculate, Input, Supplier
                     )
 
 class PotOnRecordInline(admin.TabularInline):
@@ -16,8 +17,8 @@ class PotOnRecordInline(admin.TabularInline):
 
 
 class NurseryRecordAdmin(admin.ModelAdmin):
-    fieldsets = [                                                               
-        ('Variety',                  {'fields': ['variety']}),
+    fieldsets = [
+        ('Variety',             {'fields': ['variety']}),
         ('Start Date',          {'fields': ['in_nursery_date']}),
         ('Germ Date',           {'fields': ['germ_date']}),
         ('Medium',              {'fields': ['medium']}),
@@ -32,7 +33,7 @@ class NurseryRecordAdmin(admin.ModelAdmin):
 #    extra = 3
 
 class BedAdmin(admin.ModelAdmin):
-    list_display = ('name', 'site', 'bed_set', 'width', 'width_UOM', 
+    list_display = ('name', 'site', 'bed_set', 'width', 'width_UOM',
                     'length', 'length_UOM')
     list_filter = ['bed_set', 'site', 'length']
     ordering = ('bed_set', 'name')
@@ -56,19 +57,19 @@ class DeliveryItemInline(admin.TabularInline):
     extra = 5
 
 class DeliveryRecordAdmin(admin.ModelAdmin):
-    fieldsets = [                                                                                           
-        ('date',            {'fields': ['date']}),                                                          
-        ('buyer',           {'fields': ['buyer']}),                                                         
+    fieldsets = [
+        ('date',            {'fields': ['date']}),
+        ('buyer',           {'fields': ['buyer']}),
     ]
     inlines = [DeliveryItemInline]
 
 class BuyerVarietyPriceAdmin(admin.ModelAdmin):
-    fieldsets = [                                                                                                 
-        ('date_effective',            {'fields': ['date_effective']}),                                                              
+    fieldsets = [
+        ('date_effective',            {'fields': ['date_effective']}),
         ('date_end',          {'fields': ['date_end']}),
-        ('buyer',            {'fields': ['buyer']}),         
+        ('buyer',            {'fields': ['buyer']}),
         ('variety',          {'fields': ['variety']}),
-        ('price',            {'fields': ['price']}),                                                               
+        ('price',            {'fields': ['price']}),
         ('price_UOM',            {'fields': ['price_UOM']}),
     ]
 
@@ -79,6 +80,43 @@ class CropAdmin(admin.ModelAdmin):
 
 class SpeciesAdmin(admin.ModelAdmin):
     list_display = ('__unicode__', 'genus', 'family')
+
+class ActionAdmin(admin.ModelAdmin):
+    fieldsets = [
+        ('start time',              {'fields': ['start_time']}),
+        ('end time',                {'fields': ['end_time']}),
+        ('action description',      {'fields': ['description']}),
+    ]
+
+class FertiliseInnoculateAdmin(admin.ModelAdmin):
+    fieldsets = [
+        ('start time',              {'fields': ['start_time']}),
+        ('end time',                {'fields': ['end_time']}),
+        ('action description',      {'fields': ['description']}),
+        ('crop in bed',             {'fields': ['bed_record']}),
+        ('crop in nursery',         {'fields': ['nursery_record']}),
+        ('recipe',                  {'fields': ['recipe']}),
+    ]
+
+class AmmendInnoculateAdmin(admin.ModelAdmin):
+    fieldsets = [
+        ('start time',              {'fields': ['start_time']}),
+        ('end time',                {'fields': ['end_time']}),
+        ('action description',      {'fields': ['description']}),
+        ('beds',                    {'fields': ['beds']}),
+        ('recipe',                  {'fields': ['recipe']}),
+    ]
+
+
+class InputAdmin(admin.ModelAdmin):
+    fieldsets = [
+        ('description',             {'fields': ['description']}),
+        ('supplier',                {'fields': ['supplier']}),
+        ('price',                   {'fields': ['price']}),
+        ('weight',                  {'fields': ['weight']}),
+        ('volume',                  {'fields': ['volume']}),
+    ]
+
 
 admin.site.register(Crop, CropAdmin)
 admin.site.register(Variety)
@@ -103,3 +141,8 @@ admin.site.register(LengthUOM)
 admin.site.register(YieldUOM)
 admin.site.register(AreaUOM)
 admin.site.register(BuyerVarietyPrice, BuyerVarietyPriceAdmin)
+admin.site.register(Action, ActionAdmin)
+admin.site.register(FertiliseInnoculate, FertiliseInnoculateAdmin)
+admin.site.register(AmmendInnoculate, AmmendInnoculateAdmin)
+admin.site.register(Input, InputAdmin)
+admin.site.register(Supplier)
