@@ -9,7 +9,7 @@ from djmoney.models.fields import MoneyField
 from django_measurement.models import MeasurementField
 from measurement.measures import Weight, Volume, Area
 from model_utils.managers import InheritanceManager
-from address.models import AddressField
+#from address.models import AddressField
 
 #TODO Use django measurement (https://pypi.python.org/pypi/django-measurement/)
 class AreaUOM(models.Model):
@@ -557,7 +557,7 @@ class AmmendInnoculate(BedInteraction):
 
 class Supplier(models.Model):
     name = models.CharField(max_length=200)
-    address = AddressField()
+    # address = AddressField()
 
 
 class Input(models.Model):
