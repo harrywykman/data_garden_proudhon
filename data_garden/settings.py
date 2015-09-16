@@ -228,7 +228,7 @@ INSTALLED_APPS = (
     "mezzanine.mobile",
     "polls",
     "grow_records",
-    # "django-address",
+    "address",
     "django_measurement",
 )
 
