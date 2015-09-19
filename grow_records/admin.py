@@ -93,8 +93,8 @@ class FertiliseInnoculateAdmin(admin.ModelAdmin):
         ('start time',              {'fields': ['start_time']}),
         ('end time',                {'fields': ['end_time']}),
         ('action description',      {'fields': ['description']}),
-        ('crop in bed',             {'fields': ['bed_record']}),
-        ('crop in nursery',         {'fields': ['nursery_record']}),
+        ('crop(s) in bed',             {'fields': ['bed_records']}),
+        ('crop(s) in nursery',         {'fields': ['nursery_records']}),
         ('recipe',                  {'fields': ['recipe']}),
     ]
 

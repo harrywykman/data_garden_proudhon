@@ -1,14 +1,14 @@
-{% extends "base.html" %}                                                                            
-{% load i18n %}                                                                                      
-                                                                                                     
-{% block meta_title %}{% trans "Grow Records" %}{% endblock %}                                       
-{% block title %}{% trans "Grow Records" %}{% endblock %}                                            
-                                                                                                     
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block meta_title %}{% trans "Grow Records" %}{% endblock %}
+{% block title %}{% trans "Grow Records" %}{% endblock %}
+
 {% block main %}
 
-<h1>Crop Name: {{ crop }}</h1>                                                  
-                                                                                       
-{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}           
+<h1>Crop Name: {{ crop }}</h1>
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
 <h2>CropDetails</h2>
 
@@ -25,11 +25,20 @@
     {% endfor %}
 </ul>
 
-<h2>Crop History</h2>                                                                                       
-<ol>                                                                                                        
-    {% for record in crop.crop_history %}  
-        <li> {{ record }} </li>                                                                            
-    {% endfor %}                                                                                            
+<h2>Crop History</h2>
+<ol>
+    {% for record in crop.crop_history %}
+        <li> {{ record }} </li>
+    {% endfor %}
+</ol>
+
+
+<h2>Crop Action History</h2>
+
+<ol>                                                                                      
+    {% for action in crop.actions %}                                                      
+        <li> {{ action }} </li>                                                           
+    {% endfor %}                                                                          
 </ol> 
 
 {% endblock %}

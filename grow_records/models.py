@@ -156,17 +156,28 @@ class Crop(models.Model):
 
     genus.admin_order_field = 'species__genus'
 
+    def varieties(self):
+        return self.variety_set.all()
+
     def crop_history(self):
-        varieties = self.variety_set.all()
         bed_records = []
-        for variety in varieties:
-            bed_records.append(variety.bedrecord_set.all().order_by('-in_bed_date'))
+        for variety in self.varieties():
+            for record in variety.bedrecord_set.all().order_by('-in_bed_date'):
+                bed_records.append(record)
+            #bed_records.append(variety.bedrecord_set.all().order_by('-in_bed_date'))
         return bed_records
+
+    def actions(self):
+        actions = []
+        for record in self.crop_history():
+            for action in record.plantinteraction_set.all().select_subclasses().order_by('end_time'):
+                actions.append(action)
+        return actions 
 
     # TODO - redundant method given bed_record.inground?
     def in_ground(self):
         """
-        Returns True is crop is currently in a bed.
+        Returns True if crop is currently in a bed.
         """
         brs = self.objects.bedrecord_set.all().order_by('in_bed_date')
         print brs[0]
@@ -515,22 +526,21 @@ class Action(models.Model):
 
 
 class PlantInteraction(Action):
-    bed_record = models.ForeignKey(BedRecord, null=True, blank=True)
-    nursery_record = models.ForeignKey(NurseryRecord, null=True, blank=True)
+    bed_records = models.ManyToManyField(BedRecord, null=True, blank=True)
+    #bed_record = models.ForeignKey(BedRecord, null=True, blank=True)
+    nursery_records = models.ManyToManyField(NurseryRecord, null=True, blank=True)
+    #nursery_record = models.ForeignKey(NurseryRecord, null=True, blank=True)
+
+    objects = InheritanceManager()
 
 class FertiliseInnoculate(PlantInteraction):
     recipe = models.TextField(null=True)
 
     def __unicode__(self):
         duration = self.duration()
-        if self.bed_record:
-            variety = self.bed_record.variety
-        elif self.nursery_record:
-            variety = self.nursery_record.variety
 
-        return "FERTILISED / INNOCULATED: %s | CROP: %s| DURATION: %s" % (
+        return "FERTILISED / INNOCULATED: %s | DURATION: %s" % (
                                self.description,
-                               variety,
                                duration
                               )
 
