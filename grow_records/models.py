@@ -171,7 +171,8 @@ class Crop(models.Model):
         actions = []
         for record in self.crop_history():
             for action in record.plantinteraction_set.all().select_subclasses().order_by('end_time'):
-                actions.append(action)
+                if action not in actions:
+                    actions.append(action)
         return actions 
 
     # TODO - redundant method given bed_record.inground?
