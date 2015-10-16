@@ -411,7 +411,8 @@ class Buyer(models.Model):
         vs = []
         for key, item in varieties.iteritems():
             vs.append(item)
-        return vs
+            sorted_vs = sorted(vs, key=lambda x: x[0].__unicode__())
+        return sorted_vs
 
 
 
