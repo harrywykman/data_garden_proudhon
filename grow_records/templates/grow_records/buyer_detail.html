@@ -1,37 +1,45 @@
-{% extends "base.html" %}                                                                            
-{% load i18n %}                                                                                      
-                                                                                                     
-{% block meta_title %}{% trans "Grow Records" %}{% endblock %}                                       
-{% block title %}{% trans "Grow Records" %}{% endblock %}                                            
-                                                                                                     
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block meta_title %}{% trans "Grow Records" %}{% endblock %}
+{% block title %}{% trans "Grow Records" %}{% endblock %}
+
 {% block main %}
 
-<h1>Buyer Name: {{ buyer }}</h1>                                                  
-                                                                                       
-{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}           
+<h1>Buyer Name: {{ buyer }}</h1>
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
 <h2>Buyer Details</h2>
-    
+
 <h2>Buyer Prices</h2>
 
 <ol>
     {% for price in buyer.price_list_current %}
-        <li> 
-            <strong>{{ price }}</strong> 
+        <li>
+            <strong>{{ price }}</strong>
         </li>
     {% endfor %}
 </ol>
 
-<h2>Buyer Prices</h2>
+<h2>Total Buyer Delivery Volumes</h2>
 
-<ol>                                                                                      
-    {% for item in buyer.variety_volume_delivered %}                                           
-        <li>                                                                              
-            <strong>{{ item.0 }}</strong>
-            <li>{{ item.1 }} kg </li>
-            <li>{{ item.2 }} deliveries </li>
-        </li>                                                                             
-    {% endfor %}                                                                          
-</ol>
+<table>
+    <col width="60%">
+    <col width="20%">
+    <col width="20%">
+    <tr>
+        <th><strong>Product</strong></th>
+        <th><strong>Amount (kg) &nbsp;&nbsp; </strong></th>
+        <th><strong>Number of Deliveries</strong></th>
+    </tr>
+    {% for item in buyer.variety_volume_delivered %}
+        <tr>
+            <td><strong>{{ item.0 }}</strong> </td>
+            <td> {{ item.1 }} kg </td>
+            <td>{{ item.2 }} deliveries </td>>
+        </tr>
+    {% endfor %}
+</table>
 
 {% endblock %}
