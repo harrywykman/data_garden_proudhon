@@ -14,14 +14,22 @@
     
 <h2>Buyer Prices</h2>
 
-<p>price list: {{ buyer.price_list_current }}</p>
-
 <ol>
     {% for price in buyer.price_list_current %}
         <li> 
             <strong>{{ price }}</strong> 
         </li>
     {% endfor %}
+</ol>
+
+<h2>Buyer Prices</h2>
+
+<ol>                                                                                      
+    {% for item in buyer.variety_volume_delivered %}                                           
+        <li>                                                                              
+            <strong>{{ item[0] }}</strong>                                                  
+        </li>                                                                             
+    {% endfor %}                                                                          
 </ol>
 
 {% endblock %}
