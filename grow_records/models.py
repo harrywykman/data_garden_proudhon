@@ -161,11 +161,17 @@ class Crop(models.Model):
 
     def crop_history(self):
         bed_records = []
+        nursery_records = []
+        #records = {}
         for variety in self.varieties():
             for record in variety.bedrecord_set.all().order_by('-in_bed_date'):
                 bed_records.append(record)
-            #bed_records.append(variety.bedrecord_set.all().order_by('-in_bed_date'))
-        return bed_records
+                #records[record.in_bed_date] = record
+            for record in variety.nurseryrecord_set.all().order_by('-in_nursery_date'):
+                nursery_records.append(record)
+                #records[record.in_nursery_date] = record
+        # TODO return objects sorted by date
+        return bed_records + nursery_records
 
     def actions(self):
         actions = []
@@ -273,7 +279,7 @@ class NurseryRecord(models.Model):
     def __unicode__(self):
         name = self.in_nursery_date.strftime('%Y-%m-%d %H:%M')
         if self.variety:
-            name = "%s %s" % (self.variety, name)
+            name = "nursery - %s %s" % (self.variety, name)
         return name
 
 
@@ -345,7 +351,7 @@ class BedRecord(models.Model):
 
     def __unicode__(self):
         if self.variety and self.bed:
-            name = "%s - %s" % (self.bed, self.variety)
+            name = "bed - %s - %s" % (self.bed, self.variety)
         return name
 
 #TODO Use django measurement (https://pypi.python.org/pypi/django-measurement/)
@@ -386,6 +392,28 @@ class Buyer(models.Model):
 
     def price_list_current(self):
         return self.buyervarietyprice_set.all().filter(date_end__isnull=True).order_by('-variety__crop')
+
+    def variety_volume_delivered(self):
+        varieties = {}
+        delivery_records = self.deliveryrecord_set.all()
+        for dr in delivery_records:
+            items = dr.items()
+            for item in items:
+                variety = item.variety
+                key = variety.__unicode__()
+                number_times_delivered = 1
+                var_amount = [item.variety, item.delivery_amount, number_times_delivered]
+                if key not in varieties:
+                    varieties[key] = var_amount
+                else:
+                    varieties[key][1] += item.delivery_amount
+                    varieties[key][2] += 1
+        vs = []
+        for key, item in varieties.iteritems():
+            vs.append(item)
+        return vs
+
+
 
     def __unicode__(self):
         return self.name
