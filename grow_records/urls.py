@@ -21,4 +21,3 @@ urlpatterns = [
     url(r'^act/$', views.ActionView.as_view(), name='action'),
     url(r'^ammend_innoculate/$', views.AmmendInnoculateCreate.as_view(), name='ammendinnoculate_form'),
 ]
-

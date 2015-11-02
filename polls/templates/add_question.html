@@ -1,0 +1,19 @@
+{% load staticfiles %}                                                                    
+                                                                                          
+<link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}" />
+
+{% block main %}
+
+<form method="post" action="">
+{% csrf_token %}
+<table>
+{{ poll_form }}
+{% for form in choice_forms %}
+    {{ form }}
+{% endfor %}
+</table>
+<input type="submit" value="Submit Form"/>
+</form>
+
+
+{% endblock %}

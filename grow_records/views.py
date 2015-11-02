@@ -4,7 +4,8 @@ from django.views import generic
 from django.utils import timezone
 
 from .models import Bed, Crop, BedRecord, Buyer, DeliveryRecord, Action, AmmendInnoculate
-from .forms import AmmendInnoculateForm
+from .forms import (AmmendInnoculateForm, VarietyForm, CropForm, SpeciesForm, 
+                    GenusForm, FamilyForm)
 
 # Create your views here.
 
@@ -181,3 +182,35 @@ class ResultsView(generic.DetailView):
 class AmmendInnoculateCreate(generic.edit.CreateView):
     model = AmmendInnoculate
     fields = ['start_time', 'end_time', 'recipe', 'beds']
+
+
+
+"""
+def add_variety(request):
+    if request.method == "POST":
+        vform = VarietyForm(request.POST, instance=Variety())
+        cform = CropForm(request.POST, instance=Crop())
+        sform = CropForm(request.POST, instance=Species())
+        gform = CropForm(request.POST, instance=Genus())
+        fform = CropForm(request.POST, instance=Family())
+        if pform.is_valid() and all([cf.is_valid() for cf in cforms]):
+            new_poll = pform.save()
+            for cf in cforms:
+                new_choice = cf.save(commit=False)
+                new_choice.poll = new_poll
+                new_choice.save()
+            return HttpResponseRedirect('/varieties/add/')
+    else:
+        vform = VarietyForm(request.POST, instance=Variety())                             
+        cform = CropForm(request.POST, instance=Crop())                                   
+        sform = CropForm(request.POST, instance=Species())                                
+        gform = CropForm(request.POST, instance=Genus())                                  
+        fform = CropForm(request.POST, instance=Family())
+    return render_to_response('add_variety.html', {'variety_form': vform, 
+                                                    'crop_form': cform
+                                                    'species_form': sform
+                                                    'genus_form': gform
+                                                    'family_form': fform
+                                                    })
+
+"""

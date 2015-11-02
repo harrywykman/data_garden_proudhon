@@ -393,13 +393,22 @@ class Buyer(models.Model):
     def price_list_current(self):
         return self.buyervarietyprice_set.all().filter(date_end__isnull=True).order_by('-variety__crop')
 
+    
     def variety_volume_delivered(self):
+        """ Returns a sorted list of lists of all the varieties delivered 
+        to a particular buyer in the form [variety object, amount in kg, 
+        number of deliveries]
+        """
         varieties = {}
         delivery_records = self.deliveryrecord_set.all()
         for dr in delivery_records:
             items = dr.items()
+            # Get each item and append unique varieties to a list while keeping 
+            # a running total of amount of variety and number of deliveries.
             for item in items:
                 variety = item.variety
+                # unique identifier because includes botanical name
+                # TODO make rely on botanical name function
                 key = variety.__unicode__()
                 number_times_delivered = 1
                 var_amount = [item.variety, item.delivery_amount, number_times_delivered]
@@ -409,6 +418,7 @@ class Buyer(models.Model):
                     varieties[key][1] += item.delivery_amount
                     varieties[key][2] += 1
         vs = []
+        # discard unique dictionary key and create new sorted list of values
         for key, item in varieties.iteritems():
             vs.append(item)
             sorted_vs = sorted(vs, key=lambda x: x[0].__unicode__())

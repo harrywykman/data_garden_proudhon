@@ -6,6 +6,9 @@ from django.utils import timezone
 
 from .models import Question, Choice
 
+from .forms import QuestionForm, ChoiceForm                                       
+from django.shortcuts import render_to_response, RequestContext
+
 # Create your views here.
 
 class IndexView(generic.ListView):
@@ -64,3 +67,26 @@ def vote(request, question_id):
         # with POST data. This prevents data from being posted twice if a
         # user hits the Back button.
         return HttpResponseRedirect(reverse('polls:results', args=(p.id,)))
+
+def add_question(request):
+    if request.method == "POST":
+        print('if')
+        pform = QuestionForm(request.POST, instance=Question())
+        cforms = [ChoiceForm(request.POST, prefix=str(x), instance=Choice()) for x in range(0,3)]
+        if pform.is_valid() and all([cf.is_valid() for cf in cforms]):
+            new_poll = pform.save()
+            for cf in cforms:
+                new_choice = cf.save(commit=False)
+                new_choice.poll = new_poll
+                new_choice.save()
+            return HttpResponseRedirect('/polls/add_question/')
+    else:
+        print('else')
+        pform = QuestionForm(instance=Question())
+        print(pform)
+        cforms = [ChoiceForm(prefix=str(x), instance=Choice()) for x in range(0,3)]
+        for form in cforms:
+            print(form)
+    return render_to_response('add_question.html', {'poll_form': pform, 'choice_forms': cforms})
+
+
