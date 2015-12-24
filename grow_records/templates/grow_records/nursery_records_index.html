@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block meta_title %}{% trans "Grow Records" %}{% endblock %}
+{% block title %}{% trans "Grow Records" %}{% endblock %}
+
+{% block main %}
+
+{% if nursery_records %}
+    <table>
+        <tr>
+            <th>Variety</th>
+            <th>Start Date</th>
+            <th>Germ Date</th>
+            <th>Tray Cells</th>
+            <th>Trays</th>
+            <th>Medium</th>
+            <th>PO</th>
+            <th>TP</th>
+        </tr>
+            {% for nursery_record in nursery_records %}
+                <tr>
+                    <td><a href="{% url "grow_records:crop_detail" nursery_record.variety.id %}">{{ nursery_record.variety }}</a></td>
+                    <td>{{ nursery_record.in_nursery_date }}</td>
+                    <td>{{ nursery_record.germ_date }} </td>
+                    <td>{{ nursery_record.tray_size_cell }} </td>
+                    <td>{{ nursery_record.number_trays }}</td>
+                    <td>{{ nursery_record.medium }} </td>
+                    <td>
+                        {% if nursery_record.potted_on %}
+                            {% for pot_on_record in nursery_record.pot_on_records %}
+                                <p> {{ pot_on_record }} </p>
+                            {% endfor %}
+                        {% else %}
+                            <p>X</p>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if nursery_record.transplanted %}
+                            {% for bed_record in nursery_record.bed_records %}
+                                <p> {{ bed_record }} </p>
+                            {% endfor %}
+                        {% else %}
+                            <p>X</p>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+    </table>
+{% else %}
+    <p>No nursery records to display.</p>
+{% endif %}
+
+{% endblock %}

@@ -2,9 +2,11 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.views import generic
 from django.utils import timezone
+from django.contrib import messages
 
-from .models import Bed, Crop, BedRecord, Buyer, DeliveryRecord, Action, AmmendInnoculate
-from .forms import (AmmendInnoculateForm, VarietyForm, CropForm, SpeciesForm, 
+from .models import (Bed, Crop, BedRecord, Buyer, DeliveryRecord, Action,
+                     AmmendInnoculate, Variety, NurseryRecord, PotOnRecord)
+from .forms import (AmmendInnoculateForm, VarietyForm, CropForm, SpeciesForm,
                     GenusForm, FamilyForm)
 
 # Create your views here.
@@ -112,7 +114,6 @@ class CropIndexView(generic.ListView):
         return Crop.objects.all().order_by('commonname__name')
 
 
-
 class CurrentCropsIndexView(generic.ListView):
     models = BedRecord
     template_name = 'grow_records/current_crop_index.html'
@@ -183,7 +184,45 @@ class AmmendInnoculateCreate(generic.edit.CreateView):
     model = AmmendInnoculate
     fields = ['start_time', 'end_time', 'recipe', 'beds']
 
+class AddCropForm(generic.edit.CreateView):
+    model = Crop
+    fields = ['species']
 
+def nursery_records_index(request):
+    return render(request, "grow_records/nursery_records_index.html", 
+            {'nursery_records': NurseryRecord.objects.all(), 'pot_on_records': PotOnRecord.objects.all()})
+
+def add_variety(request):
+    if request.method == 'POST': # If the form has been submitted...
+        form = VarietyForm(request.POST) # A form bound to the POST data
+        if form.is_valid(): # All validation rules pass
+            print "form is valid"
+            # Process the data in form.cleaned_data
+            variety_name = form.cleaned_data['name']
+            print "Variety name: %s" % (variety_name)
+            crop = form.cleaned_data['crop']
+            print "Crop obj: %s" % (crop)
+            crop_id = crop.id
+            print "Crop id: %s" % (crop_id)
+            variety_exists = Variety.objects.filter(name = variety_name,
+                                                 crop = crop_id)
+            print "Does is already exist? %s" % (variety_exists)
+            if variety_exists:
+                messages.error(request, """ No variety added. 
+                                        A variety with name \'%s\' and crop id 
+                                        \'%s\' already exists. """ 
+                                        % (variety_name, crop_id))
+                return render(request, 'grow_records/add_variety.html', {'form': form,})
+            else:
+                form.save()
+                messages.success(request, """ A variety with name \'%s\' and crop                
+                    id \'%s\' was successfully added."""                                  
+                    % (variety_name, crop_id))
+                return render(request, 'grow_records/add_variety.html', {'form': form,})
+    else:
+        form = VarietyForm()
+
+    return render(request, 'grow_records/add_variety.html', {'form': form,})
 
 """
 def add_variety(request):
@@ -201,12 +240,12 @@ def add_variety(request):
                 new_choice.save()
             return HttpResponseRedirect('/varieties/add/')
     else:
-        vform = VarietyForm(request.POST, instance=Variety())                             
-        cform = CropForm(request.POST, instance=Crop())                                   
-        sform = CropForm(request.POST, instance=Species())                                
-        gform = CropForm(request.POST, instance=Genus())                                  
+        vform = VarietyForm(request.POST, instance=Variety())
+        cform = CropForm(request.POST, instance=Crop())
+        sform = CropForm(request.POST, instance=Species())
+        gform = CropForm(request.POST, instance=Genus())
         fform = CropForm(request.POST, instance=Family())
-    return render_to_response('add_variety.html', {'variety_form': vform, 
+    return render_to_response('add_variety.html', {'variety_form': vform,
                                                     'crop_form': cform
                                                     'species_form': sform
                                                     'genus_form': gform

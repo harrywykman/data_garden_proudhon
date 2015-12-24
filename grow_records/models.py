@@ -179,7 +179,7 @@ class Crop(models.Model):
             for action in record.plantinteraction_set.all().select_subclasses().order_by('end_time'):
                 if action not in actions:
                     actions.append(action)
-        return actions 
+        return actions
 
     # TODO - redundant method given bed_record.inground?
     def in_ground(self):
@@ -282,6 +282,23 @@ class NurseryRecord(models.Model):
             name = "nursery - %s %s" % (self.variety, name)
         return name
 
+    def potted_on(self):
+        if self.potonrecord_set.all():
+            return True 
+        else:
+            return False
+
+    def pot_on_records(self):
+        return self.potonrecord_set.all()
+
+    def transplanted(self):
+        if BedRecord.objects.filter(nursery_record = self.id):
+            return True 
+        else:
+            return False
+
+    def bed_records(self):
+        return BedRecord.objects.filter(nursery_record = self.id)
 
 class PotOnRecord(models.Model):
     pot_on_date = models.DateField('date potted on', default=timezone.now)
@@ -393,17 +410,17 @@ class Buyer(models.Model):
     def price_list_current(self):
         return self.buyervarietyprice_set.all().filter(date_end__isnull=True).order_by('-variety__crop')
 
-    
+
     def variety_volume_delivered(self):
-        """ Returns a sorted list of lists of all the varieties delivered 
-        to a particular buyer in the form [variety object, amount in kg, 
+        """ Returns a sorted list of lists of all the varieties delivered
+        to a particular buyer in the form [variety object, amount in kg,
         number of deliveries]
         """
         varieties = {}
         delivery_records = self.deliveryrecord_set.all()
         for dr in delivery_records:
             items = dr.items()
-            # Get each item and append unique varieties to a list while keeping 
+            # Get each item and append unique varieties to a list while keeping
             # a running total of amount of variety and number of deliveries.
             for item in items:
                 variety = item.variety
@@ -611,8 +628,8 @@ class Supplier(models.Model):
 
 
 class Input(models.Model):
-    description = models.CharField(max_length=200) 
+    description = models.CharField(max_length=200)
     supplier = models.ForeignKey(Supplier)
     price = MoneyField(max_digits=10, decimal_places=2, default_currency='USD')
     weight = MeasurementField(measurement=Weight, null=True, blank=True)
-    volume = MeasurementField(measurement=Volume, null=True, blank=True) 
+    volume = MeasurementField(measurement=Volume, null=True, blank=True)

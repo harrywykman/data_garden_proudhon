@@ -20,4 +20,7 @@ urlpatterns = [
     url(r'^actions/(?P<pk>[0-9]+)/$', views.ActionDetailView.as_view(), name='action_detail'),
     url(r'^act/$', views.ActionView.as_view(), name='action'),
     url(r'^ammend_innoculate/$', views.AmmendInnoculateCreate.as_view(), name='ammendinnoculate_form'),
+    url(r'^add_crop/$', views.AddCropForm.as_view(), name='addcrop_form'),
+    url(r'^variety/add/$', views.add_variety, name='add_variety'),
+    url(r'^nursery/$', views.nursery_records_index, name='nursery_records_index'),
 ]

@@ -8,8 +8,9 @@
 
 <form method="post" action="">
 {% csrf_token %}
+<p>If desired crop is not in the crop drop down box you may <a href="">add a crop</a>.</p>
 <table>
-{{ form.as_p }}
+{{ form.as_table }}
 </table>
 <input type="submit" value="Submit Form"/>
 </form>

@@ -1,19 +1,19 @@
-{% extends "base.html" %}                                                                            
-{% load i18n %}                                                                                      
-                                                                                                     
-{% block meta_title %}{% trans "Grow Records" %}{% endblock %}                                       
-{% block title %}{% trans "Grow Records" %}{% endblock %}                                            
-                                                                                                     
-{% block main %}
-                                                                                                                           
-{% if buyer_list %}                                                                                              
-    <ul>                                                                                                                   
-    {% for buyer in buyer_list %}                                                                             
-        <li><a href="{% url 'grow_records:buyer_detail' buyer.id %}">{{ buyer }}</a></li>                           
-    {% endfor %}                                                                                                           
-    </ul>                                                                                                                  
-{% else %}                                                                                                                 
-    <p>No buyers are available.</p>                                                                                         
-{% endif %}     
+{% extends "base.html" %}
+{% load i18n %}
 
-{% endblock %}     
+{% block meta_title %}{% trans "Grow Records" %}{% endblock %}
+{% block title %}{% trans "Grow Records" %}{% endblock %}
+
+{% block main %}
+
+{% if buyer_list %}
+    <ul>
+    {% for buyer in buyer_list %}
+        <li><a href="{% url 'grow_records:buyer_detail' buyer.id %}">{{ buyer }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No buyers are available.</p>
+{% endif %}
+
+{% endblock %}

@@ -1,19 +1,19 @@
-{% extends "base.html" %}                                                                            
-{% load i18n %}                                                                                      
-                                                                                                     
-{% block meta_title %}{% trans "Grow Records" %}{% endblock %}                                       
-{% block title %}{% trans "Grow Records" %}{% endblock %}                                            
-                                                                                                     
-{% block main %}
-                                                                                                                           
-{% if bed_list %}                                                                                              
-    <ul>                                                                                                                   
-    {% for bed in bed_list %}                                                                             
-        <li><a href="{% url 'grow_records:bed_detail' bed.id %}">{{ bed }}</a></li>                           
-    {% endfor %}                                                                                                           
-    </ul>                                                                                                                  
-{% else %}                                                                                                                 
-    <p>No beds are available.</p>                                                                                         
-{% endif %}     
+{% extends "base.html" %}
+{% load i18n %}
 
-{% endblock %}     
+{% block meta_title %}{% trans "Grow Records" %}{% endblock %}
+{% block title %}{% trans "Grow Records" %}{% endblock %}
+
+{% block main %}
+
+{% if bed_list %}
+    <ul>
+    {% for bed in bed_list %}
+        <li><a href="{% url 'grow_records:bed_detail' bed.id %}">{{ bed }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No beds are available.</p>
+{% endif %}
+
+{% endblock %}

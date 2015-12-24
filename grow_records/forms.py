@@ -1,7 +1,7 @@
 from django.forms import ModelForm
 
 from grow_records.models import (AmmendInnoculate, Variety, Crop, Species,
-                                    Genus, Family)
+                                    Genus, Family, NurseryRecord)
 
 class VarietyForm(ModelForm):
     class Meta:

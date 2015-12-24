@@ -1,10 +1,10 @@
-                                                                                                                           
-{% if bed_record_list %}                                                                                              
-    <ul>                                                                                                                   
-    {% for bed_record in bed_record_list %}                                                                             
-        <li><a href="">{{ bed_record }}</a></li>                           
-    {% endfor %}                                                                                                           
-    </ul>                                                                                                                  
-{% else %}                                                                                                                 
-    <p>No bed records are available.</p>                                                                                         
-{% endif %}          
+
+{% if bed_record_list %}
+    <ul>
+    {% for bed_record in bed_record_list %}
+        <li><a href="">{{ bed_record }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No bed records are available.</p>
+{% endif %}

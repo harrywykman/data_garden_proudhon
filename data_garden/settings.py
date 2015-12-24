@@ -206,6 +206,7 @@ TEMPLATE_DIRS = (
 ################
 
 INSTALLED_APPS = (
+    "debug_toolbar",
     "django_admin_bootstrapped",
     "django.contrib.admin",
     "django.contrib.auth",
@@ -326,3 +327,7 @@ except ImportError:
     pass
 else:
     set_dynamic_settings(globals())
+
+DEBUG_TOOLBAR_CONFIG = {
+            'SHOW_TEMPLATE_CONTEXT': True,
+            }
