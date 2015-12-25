@@ -144,7 +144,7 @@ class Crop(models.Model):
 
     def __unicode__(self):
         #pcn = str(self.pref_common_name())
-        return "%s (%s)" % (self.pref_common_name(), self.species)
+        return "%s" % (self.pref_common_name())
 
     def family(self):
         return self.species.genus.family
@@ -257,7 +257,7 @@ class SoilMediumBatch(models.Model):
     #TODO recipe should be quantities of inputs in models Inputs
 
     def __unicode__(self):
-        return "Soil Medium created %s" % self.created
+        return "Batch %s" % self.created
 
 class PlantRecord(models.Model):
     pass
@@ -368,7 +368,7 @@ class BedRecord(models.Model):
 
     def __unicode__(self):
         if self.variety and self.bed:
-            name = "bed - %s - %s" % (self.bed, self.variety)
+            name = "%s" % (self.bed)
         return name
 
 #TODO Use django measurement (https://pypi.python.org/pypi/django-measurement/)

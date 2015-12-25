@@ -190,7 +190,12 @@ class AddCropForm(generic.edit.CreateView):
 
 def nursery_records_index(request):
     return render(request, "grow_records/nursery_records_index.html", 
-            {'nursery_records': NurseryRecord.objects.all(), 'pot_on_records': PotOnRecord.objects.all()})
+            {'nursery_records': NurseryRecord.objects.all()})
+
+def bed_records_index(request):
+    return render(request, "grow_records/bed_records_index.html", 
+            {'bed_records': BedRecord.objects.all()})
+
 
 def add_variety(request):
     if request.method == 'POST': # If the form has been submitted...
