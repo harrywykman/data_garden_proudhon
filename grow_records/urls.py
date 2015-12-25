@@ -23,5 +23,5 @@ urlpatterns = [
     url(r'^add_crop/$', views.AddCropForm.as_view(), name='addcrop_form'),
     url(r'^variety/add/$', views.add_variety, name='add_variety'),
     url(r'^nursery/$', views.nursery_records_index, name='nursery_records_index'),
-    url(r'^bed_records/$, views.bed_records_index, name='bed_records_index'),
+    url(r'^bed_records/$', views.bed_records_index, name='bed_records_index'),
 ]
