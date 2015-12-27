@@ -206,6 +206,7 @@ TEMPLATE_DIRS = (
 ################
 
 INSTALLED_APPS = (
+    "django_tables2",
     "data_garden_theme",
     "debug_toolbar",
     #"django_admin_bootstrapped",
@@ -238,6 +239,7 @@ INSTALLED_APPS = (
 # Each one should be a callable that takes the request object as its
 # only parameter and returns a dictionary to add to the context.
 TEMPLATE_CONTEXT_PROCESSORS = (
+    "django.core.context_processors.request",
     "django.contrib.auth.context_processors.auth",
     "django.contrib.messages.context_processors.messages",
     "django.core.context_processors.debug",
