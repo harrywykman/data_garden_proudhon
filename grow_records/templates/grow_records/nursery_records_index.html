@@ -1,13 +1,14 @@
 {% extends "base.html" %}
 {% load i18n %}
 
-{% block meta_title %}{% trans "Grow Records" %}{% endblock %}
-{% block title %}{% trans "Grow Records" %}{% endblock %}
+{% block meta_title %}{% trans "Nursery Records" %}{% endblock %}
+{% block title %}{% trans "Nursery Records" %}{% endblock %}
 
 {% block main %}
 
 {% if nursery_records %}
-    <table>
+        <table class="table table-responsive table-hover">        
+        <thead>
         <tr>
             <th>Crop</th>
             <th>Variety</th>
@@ -19,6 +20,8 @@
             <th>PO</th>
             <th>TP</th>
         </tr>
+        </thead>
+        <tbody>
             {% for nursery_record in nursery_records %}
                 <tr>
                     <td> {{ nursery_record.variety.crop.pref_common_name }} </td>
@@ -48,6 +51,7 @@
                     </td>
                 </tr>
             {% endfor %}
+        </tbody>
     </table>
 {% else %}
     <p>No nursery records to display.</p>
