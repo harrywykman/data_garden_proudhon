@@ -1,18 +1,38 @@
-{% extends "base.html" %}                                                                            
-{% load i18n %}                                                                                      
-                                                                                                     
-{% block meta_title %}{% trans "Grow Records" %}{% endblock %}                                       
-{% block title %}{% trans "Grow Records" %}{% endblock %}                                            
-                                                                                                     
-{% block main %}                                                                                                                           
-{% if crop_list %}                                                                                              
-    <ul>                                                                                                                   
-    {% for crop in crop_list %}                                                                             
-        <li><a href="{% url 'grow_records:crop_detail' crop.id %}">{{ crop }}</a></li>                           
-    {% endfor %}                                                                                                           
-    </ul>                                                                                                                  
-{% else %}                                                                                                                 
-    <p>No crops are available.</p>                                                                                         
-{% endif %}          
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block meta_title %}{% trans "Crops" %}{% endblock %}
+{% block title %}{% trans "Crops" %}{% endblock %}
+
+{% block main %}
+{% if crop_list %}
+    <table class="table table-responsive table-hover">
+        <thead><tr>
+            <th>Crop</th>
+            <th>Family</th>
+            <th>Genus</th>
+            <th>Species</th>
+            <th>Varieties</th>
+        </tr>
+        </thead>
+        <tbody>
+            {% for crop in crop_list %}
+                <tr>
+                    <td><a href="{% url 'grow_records:crop_detail' crop.id %}">{{ crop }}</a></td>
+                    <td>{{ crop.family }} </td>
+                    <td>{{ crop.genus }} </td>
+                    <td>{{ crop.species }} </td>
+                    <td>
+                        {% for variety in crop.varieties %}
+                            <p>{{ variety.name }}</p>
+                        {% endfor %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>                                                                          
+    </table>
+{% else %}
+    <p>No crops are available.</p>
+{% endif %}
 
 {% endblock %}

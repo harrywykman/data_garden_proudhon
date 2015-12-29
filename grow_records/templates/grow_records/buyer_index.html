@@ -1,17 +1,28 @@
 {% extends "base.html" %}
 {% load i18n %}
 
-{% block meta_title %}{% trans "Grow Records" %}{% endblock %}
-{% block title %}{% trans "Grow Records" %}{% endblock %}
+{% block meta_title %}{% trans "Buyers" %}{% endblock %}
+{% block title %}{% trans "Buyers" %}{% endblock %}
 
 {% block main %}
 
 {% if buyer_list %}
-    <ul>
-    {% for buyer in buyer_list %}
-        <li><a href="{% url 'grow_records:buyer_detail' buyer.id %}">{{ buyer }}</a></li>
-    {% endfor %}
-    </ul>
+
+    <table class="table table-responsive table-hover">
+
+        <thead><tr>
+            <th>Buyer</th>
+        </tr>
+        </thead>
+        <tbody>
+            {% for buyer in buyer_list %}
+                <tr>
+                    <td><a href="{% url 'grow_records:buyer_detail' buyer.id %}">{{ buyer }}</a> </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
 {% else %}
     <p>No buyers are available.</p>
 {% endif %}

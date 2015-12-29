@@ -4,6 +4,7 @@
 {% block meta_title %}{% trans "Grow Records" %}{% endblock %}
 {% block title %}{{ crop }}{% endblock %}
 {% block title-tagline %} 
+{{ crop.genus.name }} {{ crop.species.species }}
 {% for variety in crop.varieties %}                                                   
         <li> {{ variety }}</li>            
             {% endfor %}
@@ -13,21 +14,6 @@
 {% block main %}
 
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
-
-<h2>CropDetails</h2>
-
-<ul>
-    <li>botanical name: {{ crop.genus }} {{ crop.species }}</li>
-    <li>common name: {{ crop.pref_common_name }} </li>
-</ul>
-
-<h2>Varieties</h2>
-
-<ul>
-    {% for variety in crop.varieties %}
-        <li> {{ variety }} --- current price: {{ variety.current_price }}</li>
-    {% endfor %}
-</ul>
 
 <h2>Crop History</h2>
 <ol>
