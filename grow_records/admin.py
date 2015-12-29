@@ -11,6 +11,12 @@ from .models import (Crop, Variety, Genus, Species,
                         AmmendInnoculate, Input, Supplier
                     )
 
+class GenusAdmin(admin.ModelAdmin):
+    ordering = ('name',)
+
+class CommonNameAdmin(admin.ModelAdmin):
+    ordering = ('name',)
+
 class PotOnRecordInline(admin.TabularInline):
     model = PotOnRecord
     extra = 1
@@ -75,11 +81,13 @@ class BuyerVarietyPriceAdmin(admin.ModelAdmin):
 
 class CropAdmin(admin.ModelAdmin):
     list_display = ('pref_common_name', 'species', 'genus', 'family')
+    ordering = ('species', )
     #list_select_related = ('genus', 'species', 'family',)
 
 
 class SpeciesAdmin(admin.ModelAdmin):
     list_display = ('__unicode__', 'genus', 'family')
+    ordering = ('genus', 'species',)
 
 class ActionAdmin(admin.ModelAdmin):
     fieldsets = [
@@ -120,7 +128,7 @@ class InputAdmin(admin.ModelAdmin):
 
 admin.site.register(Crop, CropAdmin)
 admin.site.register(Variety)
-admin.site.register(Genus)
+admin.site.register(Genus, GenusAdmin)
 admin.site.register(Species, SpeciesAdmin)
 admin.site.register(CommonName)
 admin.site.register(Bed, BedAdmin)
