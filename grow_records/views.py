@@ -190,7 +190,7 @@ class AddCropForm(generic.edit.CreateView):
 
 def nursery_records_index(request):
     return render(request, "grow_records/nursery_records_index.html", 
-            {'nursery_records': NurseryRecord.objects.all().order_by('in_nursery_date'})
+            {'nursery_records': NurseryRecord.objects.all().order_by('in_nursery_date')})
 
 def bed_records_index(request):
     return render(request, "grow_records/bed_records_index.html", 
