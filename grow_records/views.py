@@ -194,7 +194,7 @@ def nursery_records_index(request):
 
 def bed_records_index(request):
     return render(request, "grow_records/bed_records_index.html", 
-            {'bed_records': BedRecord.objects.all()})
+            {'bed_records': BedRecord.objects.all().order_by('in_bed_date')})
 
 
 def add_variety(request):

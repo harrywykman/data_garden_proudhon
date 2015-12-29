@@ -14,6 +14,7 @@
             <th>Variety</th>
             <th>Nursery Date</th> 
             <th>In Bed Date</th>
+            <th>Out Bed Date</th>
             <th>Bed</th>
             <th>% Bed</th>
             <th># Rows</th>
@@ -28,6 +29,7 @@
                     <td><a href="{% url "grow_records:crop_detail" bed_record.variety.crop.id %}">{{ bed_record.variety.name }}</a></td>
                     <td class="fluid">{{ bed_record.nursery_record.in_nursery_date}}</td>
                     <td>{{ bed_record.in_bed_date }}</td>
+                    <td>{{ bed_record.out_bed_date }}</td>
                     <td>{{ bed_record.bed }} </td>
                     <td>{{ bed_record.bed_percent }} </td>
                     <td>{{ bed_record.rows }} </td>
