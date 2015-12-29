@@ -15,7 +15,8 @@ class FamilyAdmin(admin.ModelAdmin):
     ordering = ('name',)
 
 class VarietyAdmin(admin.ModelAdmin):
-    ordering = ('crop__species__genus__name',)
+    #ordering = ('crop__species__genus__name',)
+    ordering = ('crop__commonname__name',)
 
 class GenusAdmin(admin.ModelAdmin):
     ordering = ('name',)
