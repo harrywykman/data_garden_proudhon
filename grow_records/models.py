@@ -339,6 +339,13 @@ class SeederRecord (models.Model):
     name = models.CharField(max_length=2, choices=SEEDER_CHOICES)
     seeder_settings = models.CharField(max_length=100, null=True)
 
+    def __unicode__(self):                                                                
+        if self.name and self.seeder_settings:                                                     
+            name = "%s --- %s" % (self.name, self.seeder_settings)
+        else:
+            name = "%s" % (self.name)                                                      
+        return name
+
 # better if CHILD of PlantRecord
 class BedRecord(models.Model):
     in_bed_date = models.DateField(
