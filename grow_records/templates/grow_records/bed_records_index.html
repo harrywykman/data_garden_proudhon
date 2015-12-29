@@ -25,7 +25,7 @@
             {% for bed_record in bed_records %}
                 <tr>
                     <td> {{ bed_record.variety.crop.pref_common_name }} </td>
-                    <td><a href="{% url "grow_records:crop_detail" bed_record.variety.id %}">{{ bed_record.variety.name }}</a></td>
+                    <td><a href="{% url "grow_records:crop_detail" bed_record.variety.crop.id %}">{{ bed_record.variety.name }}</a></td>
                     <td class="fluid">{{ bed_record.nursery_record.in_nursery_date}}</td>
                     <td>{{ bed_record.in_bed_date }}</td>
                     <td>{{ bed_record.bed }} </td>

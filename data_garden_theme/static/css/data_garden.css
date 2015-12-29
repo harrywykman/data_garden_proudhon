@@ -1,16 +1,18 @@
-    width: 80%;
+.dropdown-menu {
+    font-size: 1.2em;
 }
 
 .title-tagline {
     font-family: 'Roboto', italic;
     font-size: 1.5em;
-    font-weight: 300
+    font-weight: 300;
     line-height: 1.25em;
     font-style: italic;
     /* text-align: right; */
 }
 
 .navbar-default {
+    font-family: 'Montserrat Alternates', serif;
     background-color: #ffffff;
     background-image: none;
     background-repeat: none;
