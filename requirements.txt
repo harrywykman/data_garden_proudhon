@@ -11,6 +11,7 @@ django-debug-toolbar==1.4
 django-measurement==2.0.0
 django-model-utils==2.3.1
 django-money==0.7.0
+django-tables2==1.0.5
 ecdsa==0.13
 Fabric==1.10.2
 filebrowser-safe==0.4.0

@@ -206,7 +206,7 @@ TEMPLATE_DIRS = (
 ################
 
 INSTALLED_APPS = (
-    "django_tables2",
+    #"django_tables2",
     "data_garden_theme",
     "debug_toolbar",
     #"django_admin_bootstrapped",
