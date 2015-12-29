@@ -144,7 +144,7 @@ class Crop(models.Model):
 
     def __unicode__(self):
         #pcn = str(self.pref_common_name())
-        return "%s %s" % (self.species.genus, self.species.species)
+        return "%s %s %s" % (self.pref_common_name(), self.species.genus, self.species.species)
 
     def family(self):
         return self.species.genus.family
