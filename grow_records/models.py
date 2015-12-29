@@ -121,7 +121,7 @@ class Species(models.Model):
     def __unicode__(self):
         return "%s %s" % (self.genus, self.species)
 
-    __unicode__.admin_order_field = 'genus'
+    #__unicode__.admin_order_field = 'genus'
 
     def common_name():
         cn_set = Species.commonname_set.all().order_by('preferred')
@@ -129,7 +129,7 @@ class Species(models.Model):
     def family(self):
         return self.genus.family
 
-    family.admin_order_field = 'genus__family'
+    #family.admin_order_field = 'genus__family'
 
 class Crop(models.Model):
     species = models.ForeignKey(Species, null=True)
@@ -229,7 +229,7 @@ class Variety(models.Model):
 
     def __unicode__(self):
         if self.crop:
-            name = "%s var. %s" % (self.crop, self.name)
+            name = "%s var. %s" % (self.crop.pref_common_name(), self.name)
             return name
         return self.name
 

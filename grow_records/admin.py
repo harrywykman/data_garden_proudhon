@@ -11,6 +11,12 @@ from .models import (Crop, Variety, Genus, Species,
                         AmmendInnoculate, Input, Supplier
                     )
 
+class FamilyAdmin(admin.ModelAdmin):
+    ordering = ('name',)
+
+class VarietyAdmin(admin.ModelAdmin):
+    ordering = ('crop__species__genus__name',)
+
 class GenusAdmin(admin.ModelAdmin):
     ordering = ('name',)
 
@@ -86,8 +92,8 @@ class CropAdmin(admin.ModelAdmin):
 
 
 class SpeciesAdmin(admin.ModelAdmin):
-    list_display = ('__unicode__', 'genus', 'family')
-    ordering = ('genus', 'species',)
+    #list_display = ('__unicode__', 'genus', 'family')
+    ordering = ('genus__name', )
 
 class ActionAdmin(admin.ModelAdmin):
     fieldsets = [
@@ -127,7 +133,7 @@ class InputAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Crop, CropAdmin)
-admin.site.register(Variety)
+admin.site.register(Variety, VarietyAdmin)
 admin.site.register(Genus, GenusAdmin)
 admin.site.register(Species, SpeciesAdmin)
 admin.site.register(CommonName)
@@ -144,7 +150,7 @@ admin.site.register(Buyer)
 admin.site.register(DeliveryRecord, DeliveryRecordAdmin)
 admin.site.register(DeliveryItem)
 admin.site.register(VarietyPrice)
-admin.site.register(Family)
+admin.site.register(Family, FamilyAdmin)
 admin.site.register(LengthUOM)
 admin.site.register(YieldUOM)
 admin.site.register(AreaUOM)
