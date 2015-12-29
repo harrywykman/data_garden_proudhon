@@ -62,6 +62,11 @@ class BedAdmin(admin.ModelAdmin):
 #    inlines = [BedRecordInline]
 
 
+class BedRecordAdmin(admin.ModelAdmin):
+    list_display = ('bed', 'variety', 'in_bed_date', 'out_bed_date', 'rows',
+                    'spacing_in', 'seeder', 'bed_percent',)
+    ordering = ('in_bed_date',)
+
 class BedSetAdmin(admin.ModelAdmin):
     list_display = ('name', 'site',)
 
@@ -146,7 +151,7 @@ admin.site.register(PotOnRecord)
 admin.site.register(NurseryRecord, NurseryRecordAdmin)
 admin.site.register(SeederRecord)
 admin.site.register(HarvestRecord)
-admin.site.register(BedRecord)
+admin.site.register(BedRecord, BedRecordAdmin)
 admin.site.register(Buyer)
 admin.site.register(DeliveryRecord, DeliveryRecordAdmin)
 admin.site.register(DeliveryItem)
