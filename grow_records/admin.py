@@ -30,6 +30,8 @@ class PotOnRecordInline(admin.TabularInline):
 
 
 class NurseryRecordAdmin(admin.ModelAdmin):
+    list_display = ('variety', 'in_nursery_date',)
+    ordering = ('in_nursery_date',)
     fieldsets = [
         ('Variety',             {'fields': ['variety']}),
         ('Start Date',          {'fields': ['in_nursery_date']}),
