@@ -206,6 +206,7 @@ TEMPLATE_DIRS = (
 ################
 
 INSTALLED_APPS = (
+    'dbbackup',  # django-dbbackup
     "data_garden_theme",
     "debug_toolbar",
     #"django_admin_bootstrapped",
@@ -333,3 +334,6 @@ else:
 DEBUG_TOOLBAR_CONFIG = {
             'SHOW_TEMPLATE_CONTEXT': True,
             }
+
+DBBACKUP_STORAGE = 'dbbackup.storage.filesystem_storage'
+DBBACKUP_STORAGE_OPTIONS = {'location': '/home/gerrard/code/python/data_garden/dbbackup/'}
