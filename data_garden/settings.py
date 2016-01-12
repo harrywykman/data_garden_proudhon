@@ -336,4 +336,4 @@ DEBUG_TOOLBAR_CONFIG = {
             }
 
 DBBACKUP_STORAGE = 'dbbackup.storage.filesystem_storage'
-DBBACKUP_STORAGE_OPTIONS = {'location': '/home/gerrard/code/python/data_garden/dbbackup/'}
+DBBACKUP_STORAGE_OPTIONS = {'location': './dbbackup/'}

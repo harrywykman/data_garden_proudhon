@@ -456,7 +456,11 @@ class Buyer(models.Model):
             sorted_vs = sorted(vs, key=lambda x: x[0].__unicode__())
         return sorted_vs
 
-
+    def duplicate(self):
+        self.pk = None
+        self.name += " (copy)"
+        self.save()
+        return self
 
     def __unicode__(self):
         return self.name
@@ -465,6 +469,14 @@ class Buyer(models.Model):
 class DeliveryRecord(models.Model):
     date = models.DateField('delivery_date', null=True, default=timezone.now)
     buyer = models.ForeignKey(Buyer, null=True)
+
+    def duplicate(self, buyer):
+        self.pk = None
+        self.buyer = buyer 
+        items = self.items()
+        self.save()
+        self.deliveryitem_set = items
+        return self
 
     def items(self):
         return self.deliveryitem_set.all()

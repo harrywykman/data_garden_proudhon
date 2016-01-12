@@ -82,6 +82,10 @@ class DeliveryRecordAdmin(admin.ModelAdmin):
         ('buyer',           {'fields': ['buyer']}),
     ]
     inlines = [DeliveryItemInline]
+    save_as = True
+
+class BuyerAdmin(admin.ModelAdmin):
+    save_as = True
 
 class BuyerVarietyPriceAdmin(admin.ModelAdmin):
     fieldsets = [
@@ -92,6 +96,7 @@ class BuyerVarietyPriceAdmin(admin.ModelAdmin):
         ('price',            {'fields': ['price']}),
         ('price_UOM',            {'fields': ['price_UOM']}),
     ]
+    save_as = True
 
 class CropAdmin(admin.ModelAdmin):
     list_display = ('pref_common_name', 'species', 'genus', 'family')
@@ -154,7 +159,7 @@ admin.site.register(NurseryRecord, NurseryRecordAdmin)
 admin.site.register(SeederRecord)
 admin.site.register(HarvestRecord)
 admin.site.register(BedRecord, BedRecordAdmin)
-admin.site.register(Buyer)
+admin.site.register(Buyer, BuyerAdmin)
 admin.site.register(DeliveryRecord, DeliveryRecordAdmin)
 admin.site.register(DeliveryItem)
 admin.site.register(VarietyPrice)
