@@ -484,6 +484,7 @@ class DeliveryRecord(models.Model):
     def value(self):
         items = self.deliveryitem_set.all()
         value = 0.0
+        print "items --- %s" % (items)
         if items:
             for item in items:
                 value += item.value()
