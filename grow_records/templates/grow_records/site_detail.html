@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block meta_title %}{% trans "Grow Records" %}{% endblock %}
+
+{% block title %}{{ site }}{% endblock %}
+{% block title-tagline %}
+    {{ site.area }} {{ site.area_UOM }}
+{% endblock %}
+
+{% block main %}
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+        {% for set in site.sets %}
+        <table class="table table-responsive table-hover">
+            <thead>
+                <tr>
+                    <th>{{ set.name }}</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for bed in set.bedset %}
+                <tr>
+                    <td><a href={% url 'grow_records:bed_detail' bed.id %}>{{ bed }}</a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </ul>
+{% endfor %}
+
+{% endblock %}

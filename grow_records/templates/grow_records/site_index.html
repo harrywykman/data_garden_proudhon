@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block meta_title %}{% trans "Sites" %}{% endblock %}
+{% block title %}{% trans "Sites" %}{% endblock %}
+
+{% block main %}
+
+{% if sites %}
+
+    <table class="table table-responsive table-hover">                                             
+                                                                                                   
+        <thead><tr>                                                                                
+            <th>Site</th>                                                                         
+        </tr>                                                                                      
+        </thead> 
+        <tbody>
+        {% for site in sites %}
+            <tr>
+                <td><a href="{% url 'grow_records:site_detail' site.id %}">{{ site }}</a></td>
+            </tr>
+    {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>No sites are available.</p>
+{% endif %}
+
+{% endblock %}

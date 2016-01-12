@@ -38,6 +38,9 @@ class Site(models.Model):
                                  null=True
                                 )
 
+    def sets(self):
+        return self.bedset_set.all().order_by('name')
+
     def __unicode__(self):
         return self.name
 
@@ -45,6 +48,11 @@ class Site(models.Model):
 class BedSet(models.Model):
     name = models.CharField(max_length=200)
     site = models.ForeignKey(Site, null=True)
+
+    def bedset(self):
+        return self.bed_set.all().order_by('name')
+        #return self.bed_set.all().extra(select={'int_name': 'CAST(name AS INTEGER)'}, order_by=['int_name'])
+
 
     def __unicode__(self):
         return self.name
@@ -284,7 +292,7 @@ class NurseryRecord(models.Model):
 
     def potted_on(self):
         if self.potonrecord_set.all():
-            return True 
+            return True
         else:
             return False
 
@@ -293,7 +301,7 @@ class NurseryRecord(models.Model):
 
     def transplanted(self):
         if BedRecord.objects.filter(nursery_record = self.id):
-            return True 
+            return True
         else:
             return False
 
@@ -339,11 +347,11 @@ class SeederRecord (models.Model):
     name = models.CharField(max_length=2, choices=SEEDER_CHOICES)
     seeder_settings = models.CharField(max_length=100, null=True)
 
-    def __unicode__(self):                                                                
-        if self.name and self.seeder_settings:                                                     
+    def __unicode__(self):
+        if self.name and self.seeder_settings:
             name = "%s --- %s" % (self.name, self.seeder_settings)
         else:
-            name = "%s" % (self.name)                                                      
+            name = "%s" % (self.name)
         return name
 
 # better if CHILD of PlantRecord

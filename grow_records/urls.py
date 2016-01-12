@@ -24,4 +24,6 @@ urlpatterns = [
     url(r'^variety/add/$', views.add_variety, name='add_variety'),
     url(r'^nursery/$', views.nursery_records_index, name='nursery_records_index'),
     url(r'^bed_records/$', views.bed_records_index, name='bed_records_index'),
+    url(r'^sites/$', views.site_index, name='site_index'),
+    url(r'^sites/(?P<pk>[0-9]+)/$', views.SiteDetailView.as_view(), name='site_detail'),
 ]

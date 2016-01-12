@@ -5,7 +5,7 @@ from django.utils import timezone
 from django.contrib import messages
 
 from .models import (Bed, Crop, BedRecord, Buyer, DeliveryRecord, Action,
-                     AmmendInnoculate, Variety, NurseryRecord, PotOnRecord)
+                     AmmendInnoculate, Variety, NurseryRecord, PotOnRecord, Site)
 from .forms import (AmmendInnoculateForm, VarietyForm, CropForm, SpeciesForm,
                     GenusForm, FamilyForm)
 
@@ -188,12 +188,20 @@ class AddCropForm(generic.edit.CreateView):
     model = Crop
     fields = ['species']
 
+def site_index(request):
+    return render(request, "grow_records/site_index.html",
+            {'sites': Site.objects.all().order_by('name')})
+
+class SiteDetailView(generic.DetailView):                                                          
+    model = Site                                                                                   
+    template_name = 'grow_records/site_detail.html'
+
 def nursery_records_index(request):
-    return render(request, "grow_records/nursery_records_index.html", 
+    return render(request, "grow_records/nursery_records_index.html",
             {'nursery_records': NurseryRecord.objects.all().order_by('in_nursery_date')})
 
 def bed_records_index(request):
-    return render(request, "grow_records/bed_records_index.html", 
+    return render(request, "grow_records/bed_records_index.html",
             {'bed_records': BedRecord.objects.all().order_by('in_bed_date')})
 
 
@@ -213,15 +221,15 @@ def add_variety(request):
                                                  crop = crop_id)
             print "Does is already exist? %s" % (variety_exists)
             if variety_exists:
-                messages.error(request, """ No variety added. 
-                                        A variety with name \'%s\' and crop id 
-                                        \'%s\' already exists. """ 
+                messages.error(request, """ No variety added.
+                                        A variety with name \'%s\' and crop id
+                                        \'%s\' already exists. """
                                         % (variety_name, crop_id))
                 return render(request, 'grow_records/add_variety.html', {'form': form,})
             else:
                 form.save()
-                messages.success(request, """ A variety with name \'%s\' and crop                
-                    id \'%s\' was successfully added."""                                  
+                messages.success(request, """ A variety with name \'%s\' and crop
+                    id \'%s\' was successfully added."""
                     % (variety_name, crop_id))
                 return render(request, 'grow_records/add_variety.html', {'form': form,})
     else:
