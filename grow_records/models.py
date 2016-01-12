@@ -250,7 +250,7 @@ class Variety(models.Model):
         if count > 0:
             return (bvp[0].price, bvp[0].price_UOM)
         else:
-            return None
+            return (0.0, None)
 
     def print_current_price(self):
         price = self.varietyprice_set.all().filter(date_end=None).order_by('date_effective')
