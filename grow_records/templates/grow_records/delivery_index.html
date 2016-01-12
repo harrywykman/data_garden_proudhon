@@ -21,7 +21,7 @@
         <tr>
             <td><a href="{% url 'grow_records:delivery_detail' delivery.id %}">{{ delivery.buyer }}</a></td>
                     <td> {{ delivery.date }}</td>
-                    <td>{{ delivery.value }}</a></td>
+                    <!--                    <td>{{ delivery.value }}</a></td> --!>
                     <td><a href="{% url 'grow_records:delivery_detail' delivery.id %}">
                         {% for item in delivery.items %}
                             {{ item }},&nbsp;
