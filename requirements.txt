@@ -7,6 +7,7 @@ django-admin-bootstrapped==2.5.4
 django-appconf==1.0.1
 django-compressor==1.5
 django-contrib-comments==1.6.2
+django-dbbackup==2.3.3
 django-debug-toolbar==1.4
 django-measurement==2.0.0
 django-model-utils==2.3.1
