@@ -59,7 +59,7 @@ class DeliveryRecordIndexView(generic.ListView):
         """
         Return all buyers.
         """
-        return DeliveryRecord.objects.all()
+        return DeliveryRecord.objects.all().order_by('date')
 
 class DeliveryRecordDetailView(generic.DetailView):
     model = DeliveryRecord
