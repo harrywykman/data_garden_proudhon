@@ -484,8 +484,9 @@ class DeliveryRecord(models.Model):
     def value(self):
         items = self.deliveryitem_set.all()
         value = 0.0
-        for item in items:
-            value += item.value()
+        if items:
+            for item in items:
+                value += item.value()
         return value
 
     def __unicode__(self):
