@@ -26,4 +26,6 @@ urlpatterns = [
     url(r'^bed_records/$', views.bed_records_index, name='bed_records_index'),
     url(r'^sites/$', views.site_index, name='site_index'),
     url(r'^sites/(?P<pk>[0-9]+)/$', views.SiteDetailView.as_view(), name='site_detail'),
+    url(r'^bed_records/csv/$', views.bed_records_csv, name='bed_records_csv'),
+    url(r'^nursery/csv/$', views.nursery_records_csv, name='nursery_records_csv'),
 ]

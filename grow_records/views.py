@@ -1,3 +1,6 @@
+import csv
+from datetime import datetime, date, time
+
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.views import generic
@@ -183,7 +186,7 @@ class ResultsView(generic.DetailView):
 class AmmendInnoculateCreate(generic.edit.CreateView):
     model = AmmendInnoculate
     fields = ['start_time', 'end_time', 'recipe', 'beds']
-
+    
 class AddCropForm(generic.edit.CreateView):
     model = Crop
     fields = ['species']
@@ -192,8 +195,8 @@ def site_index(request):
     return render(request, "grow_records/site_index.html",
             {'sites': Site.objects.all().order_by('name')})
 
-class SiteDetailView(generic.DetailView):                                                          
-    model = Site                                                                                   
+class SiteDetailView(generic.DetailView):
+    model = Site
     template_name = 'grow_records/site_detail.html'
 
 def nursery_records_index(request):
@@ -204,6 +207,86 @@ def bed_records_index(request):
     return render(request, "grow_records/bed_records_index.html",
             {'bed_records': BedRecord.objects.all().order_by('in_bed_date')})
 
+def nursery_records_csv(request):
+    """
+    Create a csv file from nursery record data
+    """
+    now = datetime.now()
+    nursery_records = NurseryRecord.objects.all().order_by('in_nursery_date')
+
+    response = HttpResponse(content_type='text/csv')
+    filename = "nursery_records_%s.csv" % (now.isoformat())
+    response['Content-Disposition'] = 'attachment; filename=%s' % (filename)
+
+    writer = csv.writer(response)
+    writer.writerow(['Crop', 'Variety', 'Start Date', 'Germ Date', 'Tray Cells',
+        '# Trays', 'Medium Batch', 'PO', 'TP'])
+
+    for nursery_record in nursery_records:
+
+        common_name = nursery_record.variety.crop.pref_common_name()
+        variety_name = nursery_record.variety.name
+        start_date = nursery_record.in_nursery_date
+        germ_date = nursery_record.germ_date
+        tray_size = nursery_record.tray_size_cell
+        number_trays = nursery_record.number_trays
+        medium = nursery_record.medium.created
+        potted_on = ""
+        if nursery_record.potted_on():
+            for pot_on_record in nursery_record.pot_on_records():
+               potted_on = potted_on + " %s" % (pot_on_record.pot_on_date)
+        else:
+            potted_on = "N"
+        transplanted = ""
+        if nursery_record.transplanted():
+            for bed_record in nursery_record.bed_records():
+                transplanted = transplanted + " %s" % (bed_record)
+        else:
+            transplanted = "N"
+        row = [common_name, variety_name, start_date, germ_date,                            
+                tray_size, number_trays, medium, potted_on, transplanted]                     
+        writer.writerow(row)                                                                       
+                                                                                                   
+    return response   
+
+def bed_records_csv(request):
+    """
+    Create a csv file from bed record data
+    """
+    now = datetime.now()
+    bed_records = BedRecord.objects.all().order_by('in_bed_date')
+
+    response = HttpResponse(content_type='text/csv')
+    filename = "bed_records_%s.csv" % (now.isoformat())
+    response['Content-Disposition'] = 'attachment; filename=%s' % (filename)
+
+    writer = csv.writer(response)
+    writer.writerow(['Crop', 'Variety', 'Nursery Date', 'In Bed Date', 'Out Bed Date', 'Bed',
+        '% Bed', '# Rows', 'Spacing', 'Seeder'])
+
+    for bed_record in bed_records:
+        common_name = bed_record.variety.crop.pref_common_name()
+        variety_name = bed_record.variety.name
+        if bed_record.nursery_record:
+            in_nursery_date = bed_record.nursery_record.in_nursery_date
+        else:
+            in_nursery_date = ""
+        in_bed_date = bed_record.in_bed_date
+        out_bed_date = bed_record.out_bed_date
+        bed = bed_record.bed
+        bed_percent = bed_record.bed_percent
+        rows = bed_record.rows
+        spacing_in = bed_record.spacing_in
+        if bed_record.seeder:
+            seeder_name = bed_record.seeder.name
+        else:
+            seeder_name = ""
+
+        row = [common_name, variety_name, in_nursery_date, in_bed_date,
+                out_bed_date, bed, bed_percent, rows, spacing_in, seeder_name]
+        writer.writerow(row)
+
+    return response
 
 def add_variety(request):
     if request.method == 'POST': # If the form has been submitted...
