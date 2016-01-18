@@ -443,12 +443,15 @@ class Buyer(models.Model):
                 # TODO make rely on botanical name function
                 key = variety.__unicode__()
                 number_times_delivered = 1
-                var_amount = [item.variety, item.delivery_amount, number_times_delivered]
+                var_amount = [item.variety, item.delivery_amount, 
+                    number_times_delivered, item.value()]
                 if key not in varieties:
                     varieties[key] = var_amount
                 else:
                     varieties[key][1] += item.delivery_amount
                     varieties[key][2] += 1
+                    varieties[key][3] += item.value()
+                    print "running value: %s" % (varieties[key][3])
         vs = []
         # discard unique dictionary key and create new sorted list of values
         for key, item in varieties.iteritems():

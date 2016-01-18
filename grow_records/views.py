@@ -234,7 +234,7 @@ def nursery_records_csv(request):
         potted_on = ""
         if nursery_record.potted_on():
             for pot_on_record in nursery_record.pot_on_records():
-               potted_on = potted_on + " %s" % (pot_on_record.pot_on_date)
+               potted_on = potted_on + " %S" % (POT_ON_Record.pot_on_date)
         else:
             potted_on = "N"
         transplanted = ""
