@@ -28,9 +28,9 @@
     {% for record in bed.bed_crop_history %}
         <li> 
             {% if record.in_ground %}
-                <strong>{{ record }} --- current crop</strong> 
+                <strong>{{ record.variety }} --- in bed: {{ record.in_bed_date }}</strong> 
             {% else %} 
-                {{ record }}
+                <strong>{{ record.variety }} --- in bed: {{ record.in_bed_date }}</strong> 
             {% endif %} 
         </li>
     {% endfor %}

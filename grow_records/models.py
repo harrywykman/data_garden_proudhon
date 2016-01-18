@@ -92,7 +92,7 @@ class Bed(models.Model):
                                   )
 
     def bed_crop_history(self):
-        return self.bedrecord_set.all().order_by('-in_bed_date')
+        return self.bedrecord_set.all().order_by('in_bed_date')
 
     def actions(self):
         return self.bedinteraction_set.all().select_subclasses().order_by('end_time')
